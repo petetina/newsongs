@@ -3,10 +3,9 @@ package newsongs.fr.newsongs;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Si l'idutilisateur est -2, alors c'est la premièr utilisation de l'appli
         if(idutilisateur == -2){
-            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+            Intent intent = new Intent(getApplicationContext(),FirstUseActivity.class);
             startActivity(intent);
         }
 

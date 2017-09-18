@@ -1,14 +1,13 @@
 package newsongs.fr.newsongs;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+public class FirstUseActivity extends BaseActivity {
     private Button btnInvite;
     private Button btnConnecte;
 
@@ -24,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
         btnInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 //On met à jour les préférences partagées
                 SharedPreferences settings;
                 SharedPreferences.Editor editor;
@@ -33,20 +33,20 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putInt("idutilisateur",-1); //3
                 editor.commit(); //4
 
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+
             }
         });
 
         btnConnecte.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
             }
         });
-
-    }
-
-    @Override
-    public void onBackPressed() {
 
     }
 }
