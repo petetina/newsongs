@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 public class BaseActivity extends AppCompatActivity {
 
+    //Activite mere (toutes les activites extend celle ci)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
