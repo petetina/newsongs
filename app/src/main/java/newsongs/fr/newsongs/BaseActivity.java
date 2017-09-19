@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.deezer.sdk.model.Permissions;
 import com.deezer.sdk.network.connect.DeezerConnect;
 
+//Activite mere (toutes les activites extend celle ci)
 public class BaseActivity extends AppCompatActivity {
     public static final String DEEZER_API_KEY = "252962";
     protected DeezerConnect mDeezerConnect = null;
@@ -21,7 +22,6 @@ public class BaseActivity extends AppCompatActivity {
             Permissions.LISTENING_HISTORY
     };
 
-    //Activite mere (toutes les activites extend celle ci)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
