@@ -8,8 +8,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.deezer.sdk.model.User;
 import com.deezer.sdk.network.connect.SessionStore;
 import com.deezer.sdk.network.connect.event.DialogListener;
+import com.deezer.sdk.network.request.AsyncDeezerTask;
+import com.deezer.sdk.network.request.DeezerRequest;
+import com.deezer.sdk.network.request.DeezerRequestFactory;
+import com.deezer.sdk.network.request.event.DeezerError;
+import com.deezer.sdk.network.request.event.JsonRequestListener;
+import com.deezer.sdk.player.RadioPlayer;
 
 public class FirstUseActivity extends BaseActivity {
     private Button btnInvite;
@@ -80,9 +87,46 @@ public class FirstUseActivity extends BaseActivity {
             sessionStore.save(mDeezerConnect, FirstUseActivity.this);
 
             if(mDeezerConnect.isSessionValid())
-                Toast.makeText(getApplicationContext(), "Connecté !", Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(getApplicationContext(), "Pas connecté !", Toast.LENGTH_LONG).show();
+            {
+
+                //On récupère l'id du user qui vient de se connecter
+                // get the current user id
+                DeezerRequest request = DeezerRequestFactory.requestCurrentUser();
+                AsyncDeezerTask task = new AsyncDeezerTask(mDeezerConnect, new JsonRequestListener() {
+
+                    @Override
+                    public void onResult(final Object result, final Object requestId) {
+                        if (result instanceof User) {
+                            //On sauvegarde l'id de l'utilisateur dans les préférences partagées
+                            //On met à jour les préférences partagées
+                            SharedPreferences settings;
+                            SharedPreferences.Editor editor;
+                            settings = getApplicationContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
+                            editor = settings.edit(); //2
+
+                            editor.putInt("idutilisateur",(int)((User) result).getId()); //3
+                            editor.commit(); //4
+
+                        } else {
+                            handleError(new IllegalArgumentException());
+                        }
+                    }
+
+                    @Override
+                    public void onUnparsedResult(final String response, final Object requestId) {
+                        handleError(new DeezerError("Unparsed reponse"));
+                    }
+
+
+                    @Override
+                    public void onException(final Exception exception, final Object requestId) {
+                        handleError(exception);
+                    }
+                });
+
+                task.execute(request);
+
+            }
 /*
             // Launch the Home activity
             Intent intent = new Intent(FirstUseActivity.this, MainActivity.class);
