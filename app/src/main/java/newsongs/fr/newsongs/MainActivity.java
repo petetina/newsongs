@@ -19,9 +19,11 @@ public class MainActivity extends BaseActivity {
         if(idutilisateur == -2){
             Intent intent = new Intent(getApplicationContext(),FirstUseActivity.class);
             startActivity(intent);
+        }else{
+            setContentView(R.layout.activity_main);
+
         }
 
 
-        setContentView(R.layout.activity_main);
     }
 }
