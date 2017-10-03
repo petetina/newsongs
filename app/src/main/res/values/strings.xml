@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">NewSongs</string>
+
+    <!-- FirstUseActivity -->
+    <string name="lblinscription">Je m\'inscris</string>
+    <string name="lblconnectwithdeezer">Je me connecte avec Deezer</string>
+
+    <!-- RegisterActivity -->
+    <string name="hintPseudo">Pseudo</string>
+    <string name="hintEmail">Email</string>
+    <string name="hintPrenom">Prenom</string>
+    <string name="hintNom">Nom</string>
+    <string name="hintVilleResidence">Ville de résidence</string>
 </resources>

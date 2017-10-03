@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -16,41 +17,31 @@ import com.deezer.sdk.network.request.DeezerRequest;
 import com.deezer.sdk.network.request.DeezerRequestFactory;
 import com.deezer.sdk.network.request.event.DeezerError;
 import com.deezer.sdk.network.request.event.JsonRequestListener;
-import com.deezer.sdk.player.RadioPlayer;
 
 public class FirstUseActivity extends BaseActivity {
-    private Button btnInvite;
-    private Button btnConnecte;
+    private Button btnInscription;
+    private Button btnConnectWithDeezer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_firstuse);
 
-        btnConnecte = (Button)findViewById(R.id.btnConnecte);
-        btnInvite = (Button)findViewById(R.id.btnInvite);
+        btnInscription = (Button)findViewById(R.id.btnInscription);
+        btnConnectWithDeezer = (Button)findViewById(R.id.btnConnectDezeer);
 
         //Définitions des listeners
-        btnInvite.setOnClickListener(new View.OnClickListener() {
+        btnInscription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //On met à jour les préférences partagées
-                SharedPreferences settings;
-                SharedPreferences.Editor editor;
-                settings = getApplicationContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
-                editor = settings.edit(); //2
-
-                editor.putInt("idutilisateur",-1); //3
-                editor.commit(); //4
-
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
                 startActivity(intent);
 
             }
         });
 
-        btnConnecte.setOnClickListener(new View.OnClickListener() {
+        btnConnectWithDeezer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Launches the authentication process
@@ -60,10 +51,10 @@ public class FirstUseActivity extends BaseActivity {
 
         // restore any saved session
         SessionStore sessionStore = new SessionStore();
-        if (sessionStore.restore(mDeezerConnect, getApplicationContext())) {
+        /*if (sessionStore.restore(mDeezerConnect, getApplicationContext())) {
             Toast.makeText(getApplicationContext(),"Connecté",Toast.LENGTH_LONG).show();
         }else
-            Toast.makeText(getApplicationContext(),"Pas connecté",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Pas connecté",Toast.LENGTH_LONG).show();*/
     }
 
 
@@ -106,6 +97,10 @@ public class FirstUseActivity extends BaseActivity {
 
                             editor.putInt("idutilisateur",(int)((User) result).getId()); //3
                             editor.commit(); //4
+                            Log.e("idutilisateur",Long.toString(((User) result).getId()));
+
+                            Intent intent = new Intent(FirstUseActivity.this, MainActivity.class);
+                            startActivity(intent);
 
                         } else {
                             handleError(new IllegalArgumentException());
@@ -127,10 +122,7 @@ public class FirstUseActivity extends BaseActivity {
                 task.execute(request);
 
             }
-/*
-            // Launch the Home activity
-            Intent intent = new Intent(FirstUseActivity.this, MainActivity.class);
-            startActivity(intent);*/
+
         }
 
         @Override
