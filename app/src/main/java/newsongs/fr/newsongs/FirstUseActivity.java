@@ -21,6 +21,7 @@ import com.deezer.sdk.network.request.event.JsonRequestListener;
 public class FirstUseActivity extends BaseActivity {
     private Button btnInscription;
     private Button btnConnectWithDeezer;
+    private Button btnConnecte;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,7 @@ public class FirstUseActivity extends BaseActivity {
 
         btnInscription = (Button)findViewById(R.id.btnInscription);
         btnConnectWithDeezer = (Button)findViewById(R.id.btnConnectDezeer);
+        btnConnecte = (Button)findViewById(R.id.btnConnect);
 
         //Définitions des listeners
         btnInscription.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +48,13 @@ public class FirstUseActivity extends BaseActivity {
             public void onClick(View v) {
                 // Launches the authentication process
                 connectToDeezer();
+            }
+        });
+
+        btnConnecte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO
             }
         });
 

@@ -45,6 +45,15 @@
             android:hint="@string/hintNom"
             android:inputType="textPersonName" />
 
+        <EditText
+            android:id="@+id/txtMotDePasse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/hintMdp"
+            android:inputType="textPassword" />
+
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

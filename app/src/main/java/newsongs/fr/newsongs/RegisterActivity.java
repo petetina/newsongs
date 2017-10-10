@@ -1,5 +1,8 @@
 package newsongs.fr.newsongs;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -7,15 +10,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
-import java.util.List;
+import com.deezer.sdk.model.User;
 
 import newsongs.fr.newsongs.API.ServiceGenerator;
 import newsongs.fr.newsongs.API.UtilisateurClient;
 import newsongs.fr.newsongs.Models.Reponse;
 import newsongs.fr.newsongs.Models.Utilisateur;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,6 +26,7 @@ public class RegisterActivity extends BaseActivity {
     private TextView txtEmail;
     private TextView txtPrenom;
     private TextView txtNom;
+    private TextView txtMotDePasse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +41,40 @@ public class RegisterActivity extends BaseActivity {
                 UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
                 Utilisateur utilisateur = new Utilisateur();
 
-                Call<Reponse> call = service.createUser();
+                utilisateur.setPseudo(txtPseudo.getText().toString());
+                utilisateur.setMail(txtEmail.getText().toString());
+                utilisateur.setMotdepasse(txtMotDePasse.getText().toString());
+
+                Call<Reponse> call = service.createUser(utilisateur.getMail(),utilisateur.getPseudo(),utilisateur.getMotdepasse());
                 call.enqueue(new Callback<Reponse>() {
                     @Override
                     public void onResponse(Call<Reponse> call, Response<Reponse> response) {
-                        if(response.code() == 400)
-                            Log.e("dfgbfdng","Bad request");
-                        else
-                            Log.e("onResponse","code = " + call.request().url().toString());
+                        if(response.code() == 201){
+                            Toast.makeText(getApplicationContext(),response.body().getMessage(),Toast.LENGTH_LONG).show();
+
+                            //On sauvegarde l'id de l'utilisateur dans les préférences partagées
+                            //On met à jour les préférences partagées
+                            SharedPreferences settings;
+                            SharedPreferences.Editor editor;
+                            settings = getApplicationContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
+                            editor = settings.edit(); //2
+
+                            editor.putInt("idutilisateur",Integer.parseInt(response.body().getMessage())); //3
+                            editor.commit(); //4
+
+                            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "L'inscription a échoué ! Essayez un nouveau pseudo", Toast.LENGTH_SHORT).show();
+                        }
+
+
                     }
 
                     @Override
                     public void onFailure(Call<Reponse> call, Throwable t) {
-                        Log.e("fail","OnFailure");
+                        Log.e("fail",t.getMessage());
                     }
                 });
 
@@ -67,5 +89,6 @@ public class RegisterActivity extends BaseActivity {
         txtEmail = (TextView)findViewById(R.id.txtEmail);
         txtPrenom = (TextView)findViewById(R.id.txtPrenom);
         txtNom = (TextView)findViewById(R.id.txtNom);
+        txtMotDePasse = (TextView)findViewById(R.id.txtMotDePasse);
     }
 }

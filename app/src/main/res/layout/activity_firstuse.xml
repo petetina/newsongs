@@ -24,15 +24,6 @@
             android:layout_weight="0.9"
             android:src="@mipmap/ic_launcher"/>
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|fill_vertical|fill_horizontal|center"
-            android:text="Bienvenue sur New Songs"
-            android:textAlignment="center"
-            />
-
     </LinearLayout>
 
     <LinearLayout
@@ -46,6 +37,12 @@
             android:layout_width="match_parent"
             android:layout_height="50sp"
             android:text="@string/lblconnectwithdeezer" />
+
+        <Button
+            android:id="@+id/btnConnect"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:text="@string/lblconnecte" />
 
         <Button
             android:id="@+id/btnInscription"

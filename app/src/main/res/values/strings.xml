@@ -3,6 +3,7 @@
 
     <!-- FirstUseActivity -->
     <string name="lblinscription">Je m\'inscris</string>
+    <string name="lblconnecte">Je me connecte</string>
     <string name="lblconnectwithdeezer">Je me connecte avec Deezer</string>
 
     <!-- RegisterActivity -->
@@ -10,5 +11,12 @@
     <string name="hintEmail">Email</string>
     <string name="hintPrenom">Prenom</string>
     <string name="hintNom">Nom</string>
+    <string name="hintMdp">Mot de passe</string>
     <string name="hintVilleResidence">Ville de résidence</string>
+
+    <!-- MainActivity-->
+    <string name="back"><![CDATA[>]]></string>
+    <string name="rewind"><![CDATA[<<]]></string>
+    <string name="forward"><![CDATA[>>]]></string>
+    <string name="pause">||</string>
 </resources>
