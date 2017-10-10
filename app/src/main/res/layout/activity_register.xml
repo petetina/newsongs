@@ -14,15 +14,15 @@
         android:layout_weight="0.8">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/txtPseudo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="@string/hintPseudo"/>
+            android:hint="@string/hintPseudo"
+            android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/txtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -30,28 +30,21 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/txtPrenom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="@string/hintPrenom"/>
+            android:hint="@string/hintPrenom"
+            android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/editText4"
+            android:id="@+id/txtNom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="@string/hintNom"/>
+            android:hint="@string/hintNom"
+            android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/editText5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="@string/hintVilleResidence"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
