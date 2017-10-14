@@ -7,16 +7,30 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
+
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+
+import newsongs.fr.newsongs.Libraries.MyPlayer;
+import newsongs.fr.newsongs.Libraries.MySlider;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,150 +51,17 @@ import java.util.concurrent.TimeUnit;
         }
 */
 
-public class MainActivity extends BaseActivity {
-    private Button btnApres,btnPause,btnPlay,btnPrecedent;
-    private ImageView iv;
-    private MediaPlayer mediaPlayer;
+public class MainActivity extends BaseActivity{
 
-    private double startTime = 0;
-    private double finalTime = 0;
-
-    private Handler myHandler = new Handler();;
-    private int forwardTime = 5000;
-    private int backwardTime = 5000;
-    private SeekBar seekbar;
-    private TextView tx1,tx2,tx3;
-
-    public static int oneTimeOnly = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Initialisation du player
+        MyPlayer myPlayer = new MyPlayer(this);
+        //Initialisation du slider
+        MySlider mySlider = new MySlider(this);
 
-        btnApres = (Button) findViewById(R.id.btnApres);
-        btnPause = (Button) findViewById(R.id.btnPause);
-        btnPlay = (Button)findViewById(R.id.btnPlay);
-        btnPrecedent = (Button)findViewById(R.id.btnPrecedent);
-        iv = (ImageView)findViewById(R.id.imageView);
 
-        tx1 = (TextView)findViewById(R.id.textView2);
-        tx2 = (TextView)findViewById(R.id.textView3);
-        tx3 = (TextView)findViewById(R.id.textView4);
-        tx3.setText("Song.mp3");
-
-        //mediaPlayer = MediaPlayer.create(this, R.raw.song);
-        seekbar = (SeekBar)findViewById(R.id.seekBar);
-        seekbar.setClickable(false);
-        btnPause.setEnabled(false);
-
-        btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Playing sound",Toast.LENGTH_SHORT).show();
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                try {
-                    mediaPlayer.setDataSource("https://e-cdns-preview-5.dzcdn.net/stream/51afcde9f56a132096c0496cc95eb24b-4.mp3");
-                } catch (IllegalArgumentException e) {
-                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (SecurityException e) {
-                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (IllegalStateException e) {
-                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    mediaPlayer.prepare();
-                } catch (IllegalStateException e) {
-                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                }
-                mediaPlayer.start();
-
-                finalTime = mediaPlayer.getDuration();
-                startTime = mediaPlayer.getCurrentPosition();
-
-                if (oneTimeOnly == 0) {
-                    seekbar.setMax((int) finalTime);
-                    oneTimeOnly = 1;
-                }
-
-                tx2.setText(String.format("%d min, %d sec",
-                        TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
-                        TimeUnit.MILLISECONDS.toSeconds((long) finalTime) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
-                                        finalTime)))
-                );
-
-                tx1.setText(String.format("%d min, %d sec",
-                        TimeUnit.MILLISECONDS.toMinutes((long) startTime),
-                        TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
-                                        startTime)))
-                );
-
-                seekbar.setProgress((int)startTime);
-                myHandler.postDelayed(UpdateSongTime,100);
-                btnPause.setEnabled(true);
-                btnPlay.setEnabled(false);
-            }
-        });
-
-        btnPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Pausing sound",Toast.LENGTH_SHORT).show();
-                mediaPlayer.pause();
-                btnPause.setEnabled(false);
-                btnPlay.setEnabled(true);
-            }
-        });
-
-        btnApres.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int temp = (int)startTime;
-
-                if((temp+forwardTime)<=finalTime){
-                    startTime = startTime + forwardTime;
-                    mediaPlayer.seekTo((int) startTime);
-                    Toast.makeText(getApplicationContext(),"You have Jumped forward 5 seconds",Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getApplicationContext(),"Cannot jump forward 5 seconds",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        btnPrecedent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int temp = (int)startTime;
-
-                if((temp-backwardTime)>0){
-                    startTime = startTime - backwardTime;
-                    mediaPlayer.seekTo((int) startTime);
-                    Toast.makeText(getApplicationContext(),"You have Jumped backward 5 seconds",Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getApplicationContext(),"Cannot jump backward 5 seconds",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
-
-    private Runnable UpdateSongTime = new Runnable() {
-        public void run() {
-            startTime = mediaPlayer.getCurrentPosition();
-            tx1.setText(String.format("%d min, %d sec",
-                    TimeUnit.MILLISECONDS.toMinutes((long) startTime),
-                    TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
-                                    toMinutes((long) startTime)))
-            );
-            seekbar.setProgress((int)startTime);
-            myHandler.postDelayed(this, 100);
-        }
-    };
-
 }
