@@ -18,6 +18,13 @@ import com.deezer.sdk.network.request.DeezerRequestFactory;
 import com.deezer.sdk.network.request.event.DeezerError;
 import com.deezer.sdk.network.request.event.JsonRequestListener;
 
+import newsongs.fr.newsongs.API.ServiceGenerator;
+import newsongs.fr.newsongs.API.UtilisateurClient;
+import newsongs.fr.newsongs.Models.Reponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class FirstUseActivity extends BaseActivity {
     private Button btnInscription;
     private Button btnConnectWithDeezer;
@@ -97,19 +104,38 @@ public class FirstUseActivity extends BaseActivity {
                     @Override
                     public void onResult(final Object result, final Object requestId) {
                         if (result instanceof User) {
-                            //On sauvegarde l'id de l'utilisateur dans les préférences partagées
-                            //On met à jour les préférences partagées
-                            SharedPreferences settings;
-                            SharedPreferences.Editor editor;
-                            settings = getApplicationContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
-                            editor = settings.edit(); //2
+                            final User currentUser = (User)result;
 
-                            editor.putInt("idutilisateur",(int)((User) result).getId()); //3
-                            editor.commit(); //4
-                            Log.e("idutilisateur",Long.toString(((User) result).getId()));
+                            //Une fois qu'on a récupéré l'id de l'utilisateur courant,
+                            //on va créer un utilisateur dans notre bdd (si l'utilisateur n'existe pas déjà dans la bdd)
+                            UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
+                            Call<Reponse> call = service.createUser(currentUser.getEmail(),currentUser.getName(),"");
+                            call.enqueue(new Callback<Reponse>() {
+                                @Override
+                                public void onResponse(Call<Reponse> call, Response<Reponse> response) {
+                                    if(response.code() == 201) {
+                                        //On sauvegarde l'id de l'utilisateur dans les préférences partagées
+                                        //On met à jour les préférences partagées
+                                        SharedPreferences settings;
+                                        SharedPreferences.Editor editor;
+                                        settings = getApplicationContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
+                                        editor = settings.edit(); //2
 
-                            Intent intent = new Intent(FirstUseActivity.this, MainActivity.class);
-                            startActivity(intent);
+                                        editor.putInt("idutilisateur", (int) (currentUser.getId())); //3
+                                        editor.commit(); //4
+                                        Log.e("idutilisateur", Long.toString(currentUser.getId()));
+
+                                        Intent intent = new Intent(FirstUseActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                    }else
+                                        Toast.makeText(getApplicationContext(),"Erreur lors de la création de votre compte !",Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onFailure(Call<Reponse> call, Throwable t) {
+                                    Toast.makeText(getApplicationContext(),"Erreur interne.",Toast.LENGTH_LONG).show();
+                                }
+                            });
 
                         } else {
                             handleError(new IllegalArgumentException());

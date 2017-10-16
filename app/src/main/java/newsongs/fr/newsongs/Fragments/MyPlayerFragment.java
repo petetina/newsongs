@@ -1,10 +1,14 @@
-package newsongs.fr.newsongs.Libraries;
+package newsongs.fr.newsongs.Fragments;
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -19,8 +23,7 @@ import newsongs.fr.newsongs.R;
  * Created by antoine on 14/10/17.
  */
 
-public class MyPlayer {
-    private Activity ctx;
+public class MyPlayerFragment extends Fragment {
     private Button btnApres,btnPause,btnPlay,btnPrecedent;
     private TextView tx1,tx2,tx3;
 
@@ -35,34 +38,38 @@ public class MyPlayer {
     private MediaPlayer mediaPlayer;
     private Handler myHandler = new Handler();
 
-    public MyPlayer(Activity ctxf){
-        this.ctx = ctxf;
+    public MyPlayerFragment() {}
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_player,container,false);
 
         hook();
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ctx, "Playing sound",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Playing sound",Toast.LENGTH_SHORT).show();
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 try {
                     mediaPlayer.setDataSource("https://e-cdns-preview-5.dzcdn.net/stream/51afcde9f56a132096c0496cc95eb24b-4.mp3");
                 } catch (IllegalArgumentException e) {
-                    Toast.makeText(ctx, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
                 } catch (SecurityException e) {
-                    Toast.makeText(ctx, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
                 } catch (IllegalStateException e) {
-                    Toast.makeText(ctx, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 try {
                     mediaPlayer.prepare();
                 } catch (IllegalStateException e) {
-                    Toast.makeText(ctx, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
                 } catch (IOException e) {
-                    Toast.makeText(ctx, "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
                 }
 
                 mediaPlayer.seekTo((int)currentTime);
@@ -100,7 +107,7 @@ public class MyPlayer {
         btnPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ctx, "Pausing sound",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Pausing sound",Toast.LENGTH_SHORT).show();
                 mediaPlayer.pause();
                 currentTime = seekbar.getProgress();
                 btnPause.setEnabled(false);
@@ -116,9 +123,9 @@ public class MyPlayer {
                 if((temp+forwardTime)<=finalTime){
                     startTime = startTime + forwardTime;
                     mediaPlayer.seekTo((int) startTime);
-                    Toast.makeText(ctx,"You have Jumped forward 5 seconds",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getView(),"You have Jumped forward 5 seconds",Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(ctx,"Cannot jump forward 5 seconds",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getView(),"Cannot jump forward 5 seconds",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -131,9 +138,9 @@ public class MyPlayer {
                 if((temp-backwardTime)>0){
                     startTime = startTime - backwardTime;
                     mediaPlayer.seekTo((int) startTime);
-                    Toast.makeText(ctx,"You have Jumped backward 5 seconds",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getView(),"You have Jumped backward 5 seconds",Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(ctx,"Cannot jump backward 5 seconds",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getView(),"Cannot jump backward 5 seconds",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -155,6 +162,8 @@ public class MyPlayer {
                 mediaPlayer.seekTo((int)currentTime);
             }
         });
+
+        return view;
     }
 
     private Runnable UpdateSongTime = new Runnable() {
@@ -172,12 +181,12 @@ public class MyPlayer {
     };
     private void hook(){
 
-        btnPlay = (Button)ctx.findViewById(R.id.btnPlay);
-        btnPause = (Button) ctx.findViewById(R.id.btnPause);
-        tx1 = (TextView)ctx.findViewById(R.id.textView2);
-        tx2 = (TextView)ctx.findViewById(R.id.textView3);
-        tx3 = (TextView)ctx.findViewById(R.id.textView4);
-        seekbar = (SeekBar)ctx.findViewById(R.id.seekBar);
+        btnPlay = (Button)getView().findViewById(R.id.btnPlay);
+        btnPause = (Button) getView().findViewById(R.id.btnPause);
+        tx1 = (TextView)getView().findViewById(R.id.textView2);
+        tx2 = (TextView)getView().findViewById(R.id.textView3);
+        tx3 = (TextView)getView().findViewById(R.id.textView4);
+        seekbar = (SeekBar)getView().findViewById(R.id.seekBar);
         seekbar.setClickable(false);
         btnPause.setEnabled(false);
     }

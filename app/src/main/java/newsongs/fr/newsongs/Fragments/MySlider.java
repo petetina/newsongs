@@ -1,4 +1,4 @@
-package newsongs.fr.newsongs.Libraries;
+package newsongs.fr.newsongs.Fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -63,7 +63,7 @@ public class MySlider implements BaseSliderView.OnSliderClickListener, ViewPager
 
             mySlider.addSlider(textSliderView);
         }
-        mySlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        mySlider.setPresetTransformer(SliderLayout.Transformer.ZoomOutSlide);
         mySlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mySlider.setCustomAnimation(new DescriptionAnimation());
         mySlider.setDuration(4000);
@@ -74,7 +74,7 @@ public class MySlider implements BaseSliderView.OnSliderClickListener, ViewPager
         l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mySlider.setPresetTransformer(((TextView) view).getText().toString());
+                //mySlider.setPresetTransformer(((TextView) view).getText().toString());
                 Toast.makeText(ctx, ((TextView) view).getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
