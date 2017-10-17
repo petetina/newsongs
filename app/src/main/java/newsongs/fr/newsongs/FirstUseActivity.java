@@ -30,7 +30,6 @@ import retrofit2.Response;
 public class FirstUseActivity extends BaseActivity {
     private Button btnInscription;
     private Button btnConnectWithDeezer;
-    private Button btnConnecte;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,6 @@ public class FirstUseActivity extends BaseActivity {
 
         btnInscription = (Button)findViewById(R.id.btnInscription);
         btnConnectWithDeezer = (Button)findViewById(R.id.btnConnectDezeer);
-        btnConnecte = (Button)findViewById(R.id.btnConnect);
 
         //Définitions des listeners
         btnInscription.setOnClickListener(new View.OnClickListener() {
@@ -57,13 +55,6 @@ public class FirstUseActivity extends BaseActivity {
             public void onClick(View v) {
                 // Launches the authentication process
                 connectToDeezer();
-            }
-        });
-
-        btnConnecte.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO
             }
         });
 
@@ -113,14 +104,15 @@ public class FirstUseActivity extends BaseActivity {
                             //on va créer un utilisateur dans notre bdd (si l'utilisateur n'existe pas déjà dans la bdd)
                             UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
                             Call<Reponse> call;
-                            if(currentUser.getEmail() == null)
-                                call = service.createUser("",currentUser.getName(),"");
-                            else
-                                call = service.createUser(currentUser.getEmail(),currentUser.getName(),"");
+                            String mail = currentUser.getEmail() == null ? "" : currentUser.getEmail();
+                            call = service.createUser(mail,currentUser.getName(),"", currentUser.getId());
                             call.enqueue(new Callback<Reponse>() {
                                 @Override
                                 public void onResponse(Call<Reponse> call, Response<Reponse> response) {
-                                    if(response.code() == 201) {
+                                    if(response.code() == 201 || response.code() == 200) {
+                                        if(response.code()==200)
+                                            Toast.makeText(getApplicationContext(), "Enfin de retour !", Toast.LENGTH_LONG).show();
+
                                         //On sauvegarde l'id de l'utilisateur dans les préférences partagées
                                         //On met à jour les préférences partagées
                                         SharedPreferences settings;
@@ -134,14 +126,6 @@ public class FirstUseActivity extends BaseActivity {
 
                                         Intent intent = new Intent(FirstUseActivity.this, MainActivity.class);
                                         startActivity(intent);
-                                    }else {
-                                        Log.e("code",response.code()+"");
-                                        try {
-                                            Log.e("errorBody",response.errorBody().string());
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Toast.makeText(getApplicationContext(), "Erreur lors de la création de votre compte !", Toast.LENGTH_LONG).show();
                                     }
                                 }
 

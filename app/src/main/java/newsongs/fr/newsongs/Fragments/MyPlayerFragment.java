@@ -50,7 +50,6 @@ public class MyPlayerFragment extends Fragment {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Playing sound",Toast.LENGTH_SHORT).show();
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 try {
@@ -107,7 +106,6 @@ public class MyPlayerFragment extends Fragment {
         btnPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Pausing sound",Toast.LENGTH_SHORT).show();
                 mediaPlayer.pause();
                 currentTime = seekbar.getProgress();
                 btnPause.setEnabled(false);

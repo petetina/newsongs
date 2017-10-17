@@ -1,5 +1,7 @@
 package newsongs.fr.newsongs.Models;
 
+import java.util.List;
+
 /**
  * Created by antoine on 07/10/17.
  */
@@ -10,6 +12,7 @@ public class Utilisateur {
     private String mail;
     private String pseudo;
     private String motdepasse;
+    private List<Utilisateur> amis;
 
     public int getIdutilisateur() {
         return idutilisateur;

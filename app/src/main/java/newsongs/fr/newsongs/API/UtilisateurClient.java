@@ -25,4 +25,8 @@ public interface UtilisateurClient {
     @FormUrlEncoded
     @POST("utilisateur")
     Call<Reponse> createUser(@Field("mail") String mail, @Field("pseudo") String pseudo, @Field("motdepasse") String motdepasse);
+
+    @FormUrlEncoded
+    @POST("utilisateur")
+    Call<Reponse> createUser(@Field("mail") String mail, @Field("pseudo") String pseudo, @Field("motdepasse") String motdepasse, @Field("idutilisateurdeezer") long idutilisateurdeezer);
 }
