@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import newsongs.fr.newsongs.API.ServiceGenerator;
 import newsongs.fr.newsongs.API.UtilisateurClient;
@@ -24,9 +25,6 @@ public class FriendsActivity extends BaseActivity {
     ListView lv;
     ArrayList prgmName;
 
-    public static int [] prgmImages={R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp};
-    public static String [] prgmNameList={"Gerard","Antoine","Monique","Jean-Celestin","Marie-therese","Michel","Marcelle","Christian","Bertrand"};
-
 
 
     @Override
@@ -34,9 +32,11 @@ public class FriendsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
         lv = (ListView) findViewById(R.id.listView);
-        lv.setAdapter(new CustomAdapter(this, prgmNameList, prgmImages));
 
         getFriendsByUser();
+
+
+        lv.setAdapter(new CustomAdapter(this, new ArrayList<Utilisateur>()));
     }
 
 
@@ -48,18 +48,19 @@ public class FriendsActivity extends BaseActivity {
 
         UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
 
-        Call<Utilisateur> user = service.findById(2);
+        Call<List<Utilisateur>> user = service.getFriendsById(idutilisateur);
 
-        user.enqueue(new Callback<Utilisateur>() {
+        user.enqueue(new Callback<List<Utilisateur>>() {
 
             @Override
-            public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
-                Log.e("c","coucou2");
-                Toast.makeText(getApplicationContext(), response.body().getIdutilisateur() + "", Toast.LENGTH_LONG).show();
+            public void onResponse(Call<List<Utilisateur>> call, Response<List<Utilisateur>> response) {
+                Toast.makeText(getApplicationContext(), response.body().get(0).getIdutilisateur() + "", Toast.LENGTH_LONG).show();
+
+                lv.setAdapter(new CustomAdapter(FriendsActivity.this, response.body()));
             }
 
             @Override
-            public void onFailure(Call<Utilisateur> call, Throwable t) {
+            public void onFailure(Call<List<Utilisateur>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "pas ok", Toast.LENGTH_LONG).show();
             }
         });
