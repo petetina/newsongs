@@ -18,6 +18,7 @@ public class MainActivity extends BaseActivity {
         int idutilisateur = settings.getInt("idutilisateur", -2); //2
 
         //Si l'idutilisateur est -2, alors c'est la premièr utilisation de l'appli
+
         if (idutilisateur == -2) {
             Intent intent = new Intent(getApplicationContext(), FirstUseActivity.class);
             startActivity(intent);
