@@ -10,32 +10,35 @@ package newsongs.fr.newsongs;
         import android.widget.ImageView;
         import android.widget.TextView;
         import android.widget.Toast;
+
+        import java.util.List;
+
+        import newsongs.fr.newsongs.Models.Utilisateur;
+
 public class CustomAdapter extends BaseAdapter{
 
-    String [] result;
+    List<Utilisateur> result;
     Context context;
-    int [] imageId;
 
     private static LayoutInflater inflater=null;
-    public CustomAdapter(Activity mainActivity, String[] prgmNameList, int[] prgmImages) {
+    public CustomAdapter(Activity mainActivity, List<Utilisateur> prgmFriendsList) {
 
         // TODO Auto-generated constructor stub
-        result=prgmNameList;
+        result=prgmFriendsList;
         context=mainActivity;
-        imageId=prgmImages;
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return result.length;
+        return result.size();
     }
 
     @Override
-    public Object getItem(int position) {
+    public Utilisateur getItem(int position) {
         // TODO Auto-generated method stub
-        return position;
+        return result.get(position);
     }
 
     @Override
@@ -46,6 +49,7 @@ public class CustomAdapter extends BaseAdapter{
 
     public class Holder
     {
+        int id;
         TextView tv;
         ImageButton img;
     }
@@ -57,20 +61,19 @@ public class CustomAdapter extends BaseAdapter{
         rowView = inflater.inflate(R.layout.program_list, null);
         holder.tv=(TextView) rowView.findViewById(R.id.textView1);
         holder.img=(ImageButton) rowView.findViewById(R.id.imageButton1);
-        holder.tv.setText(result[position]);
-        holder.img.setImageResource(imageId[position]);
+        holder.tv.setText(result.get(position).getPseudo());
         rowView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Toast.makeText(context, "You Clicked " + result[position], Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "You Clicked " + result.get(position).getPseudo(), Toast.LENGTH_LONG).show();
             }
         });
 
         holder.img.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "You Clicked on button", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "You Clicked on button" + getItem(position).getPseudo(), Toast.LENGTH_LONG).show();
             }
         });
         return rowView;
