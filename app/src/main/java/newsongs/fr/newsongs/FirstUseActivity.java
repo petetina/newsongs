@@ -105,6 +105,7 @@ public class FirstUseActivity extends BaseActivity {
                     public void onResult(final Object result, final Object requestId) {
                         if (result instanceof User) {
                             final User currentUser = (User)result;
+                            Log.e("idutilisateur",currentUser.getId()+"");
 
                             //Une fois qu'on a récupéré l'id de l'utilisateur courant,
                             //on va créer un utilisateur dans notre bdd (si l'utilisateur n'existe pas déjà dans la bdd)

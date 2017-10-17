@@ -8,30 +8,22 @@
     android:layout_weight="1"
     >
 
-    <LinearLayout
+    <fragment
+        android:id="@+id/fragmentslider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.9"
-        android:orientation="vertical">
-        <com.daimajia.slider.library.SliderLayout
-            android:id="@+id/slider"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            />
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/listMusic">
-
-        </ListView>
-    </LinearLayout>
+        class="newsongs.fr.newsongs.Fragments.MySliderFragment"
+        android:layout="@layout/fragment_slider"
+        tools:layout="@layout/fragment_slider" />
 
     <fragment
+        android:id="@+id/fragmentplayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.1"
         class="newsongs.fr.newsongs.Fragments.MyPlayerFragment"
         android:layout="@layout/fragment_player"
-        />
+        tools:layout="@layout/fragment_player" />
 
 </LinearLayout>

@@ -45,7 +45,7 @@ public class MyPlayerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_player,container,false);
 
-        hook();
+        hook(view);
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,14 +179,14 @@ public class MyPlayerFragment extends Fragment {
             myHandler.postDelayed(this, 100);
         }
     };
-    private void hook(){
+    private void hook(View view){
 
-        btnPlay = (Button)getView().findViewById(R.id.btnPlay);
-        btnPause = (Button) getView().findViewById(R.id.btnPause);
-        tx1 = (TextView)getView().findViewById(R.id.textView2);
-        tx2 = (TextView)getView().findViewById(R.id.textView3);
-        tx3 = (TextView)getView().findViewById(R.id.textView4);
-        seekbar = (SeekBar)getView().findViewById(R.id.seekBar);
+        btnPlay = (Button)view.findViewById(R.id.btnPlay);
+        btnPause = (Button) view.findViewById(R.id.btnPause);
+        tx1 = (TextView)view.findViewById(R.id.textView2);
+        tx2 = (TextView)view.findViewById(R.id.textView3);
+        tx3 = (TextView)view.findViewById(R.id.textView4);
+        seekbar = (SeekBar)view.findViewById(R.id.seekBar);
         seekbar.setClickable(false);
         btnPause.setEnabled(false);
     }

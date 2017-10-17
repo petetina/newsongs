@@ -1,9 +1,13 @@
 package newsongs.fr.newsongs.Fragments;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,17 +28,21 @@ import newsongs.fr.newsongs.TransformerAdapter;
  * Created by antoine on 14/10/17.
  */
 
-public class MySlider implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener{
-    private Activity ctx;
+public class MySliderFragment extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener{
     private SliderLayout mySlider;
 
-    public MySlider(Activity ctx){
-        this.ctx = ctx;
-        mySlider = (SliderLayout)ctx.findViewById(R.id.slider);
-        populate();
+    public MySliderFragment(){}
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_slider,container,false);
+        mySlider = (SliderLayout)view.findViewById(R.id.slider);
+        populate(view);
+        return view;
     }
 
-    private void populate(){
+    private void populate(View view){
         HashMap<String,String> url_maps = new HashMap<String, String>();
         url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
         url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
@@ -48,7 +56,7 @@ public class MySlider implements BaseSliderView.OnSliderClickListener, ViewPager
         file_maps.put("Game of Thrones", R.drawable.background);
 
         for(String name : file_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(ctx);
+            TextSliderView textSliderView = new TextSliderView(getActivity());
             // initialize a SliderLayout
             textSliderView
                     .description(name)
@@ -69,20 +77,20 @@ public class MySlider implements BaseSliderView.OnSliderClickListener, ViewPager
         mySlider.setDuration(4000);
         mySlider.addOnPageChangeListener(this);
 
-        ListView l = (ListView)ctx.findViewById(R.id.listMusic);
-        l.setAdapter(new TransformerAdapter(ctx));
+        ListView l = (ListView)view.findViewById(R.id.listMusic);
+        l.setAdapter(new TransformerAdapter(getActivity()));
         l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //mySlider.setPresetTransformer(((TextView) view).getText().toString());
-                Toast.makeText(ctx, ((TextView) view).getText().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), ((TextView) view).getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        Toast.makeText(ctx,slider.getBundle().get("extra") + "",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),slider.getBundle().get("extra") + "",Toast.LENGTH_SHORT).show();
     }
 
     @Override
