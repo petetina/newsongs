@@ -18,6 +18,8 @@ import com.deezer.sdk.network.request.DeezerRequestFactory;
 import com.deezer.sdk.network.request.event.DeezerError;
 import com.deezer.sdk.network.request.event.JsonRequestListener;
 
+import java.io.IOException;
+
 import newsongs.fr.newsongs.API.ServiceGenerator;
 import newsongs.fr.newsongs.API.UtilisateurClient;
 import newsongs.fr.newsongs.Models.Reponse;
@@ -110,7 +112,11 @@ public class FirstUseActivity extends BaseActivity {
                             //Une fois qu'on a récupéré l'id de l'utilisateur courant,
                             //on va créer un utilisateur dans notre bdd (si l'utilisateur n'existe pas déjà dans la bdd)
                             UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
-                            Call<Reponse> call = service.createUser(currentUser.getEmail(),currentUser.getName(),"");
+                            Call<Reponse> call;
+                            if(currentUser.getEmail() == null)
+                                call = service.createUser("",currentUser.getName(),"");
+                            else
+                                call = service.createUser(currentUser.getEmail(),currentUser.getName(),"");
                             call.enqueue(new Callback<Reponse>() {
                                 @Override
                                 public void onResponse(Call<Reponse> call, Response<Reponse> response) {
@@ -128,8 +134,15 @@ public class FirstUseActivity extends BaseActivity {
 
                                         Intent intent = new Intent(FirstUseActivity.this, MainActivity.class);
                                         startActivity(intent);
-                                    }else
-                                        Toast.makeText(getApplicationContext(),"Erreur lors de la création de votre compte !",Toast.LENGTH_LONG).show();
+                                    }else {
+                                        Log.e("code",response.code()+"");
+                                        try {
+                                            Log.e("errorBody",response.errorBody().string());
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        Toast.makeText(getApplicationContext(), "Erreur lors de la création de votre compte !", Toast.LENGTH_LONG).show();
+                                    }
                                 }
 
                                 @Override
