@@ -11,7 +11,7 @@ public class FriendsActivity extends BaseActivity {
     ListView lv;
     ArrayList prgmName;
 
-    public static int [] prgmImages={R.drawable.background,R.drawable.background,R.drawable.background,R.drawable.background,R.drawable.background,R.drawable.background,R.drawable.background,R.drawable.background,R.drawable.background};
+    public static int [] prgmImages={R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp,R.drawable.ic_delete_forever_black_24dp};
     public static String [] prgmNameList={"Let Us C","c++","JAVA","Jsp","Microsoft .Net","Android","PHP","Jquery","JavaScript"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {

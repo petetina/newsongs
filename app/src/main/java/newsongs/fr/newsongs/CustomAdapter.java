@@ -6,6 +6,7 @@ package newsongs.fr.newsongs;
         import android.view.View.OnClickListener;
         import android.view.ViewGroup;
         import android.widget.BaseAdapter;
+        import android.widget.ImageButton;
         import android.widget.ImageView;
         import android.widget.TextView;
         import android.widget.Toast;
@@ -46,7 +47,7 @@ public class CustomAdapter extends BaseAdapter{
     public class Holder
     {
         TextView tv;
-        ImageView img;
+        ImageButton img;
     }
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -55,14 +56,21 @@ public class CustomAdapter extends BaseAdapter{
         View rowView;
         rowView = inflater.inflate(R.layout.program_list, null);
         holder.tv=(TextView) rowView.findViewById(R.id.textView1);
-        holder.img=(ImageView) rowView.findViewById(R.id.imageView1);
+        holder.img=(ImageButton) rowView.findViewById(R.id.imageButton1);
         holder.tv.setText(result[position]);
         holder.img.setImageResource(imageId[position]);
         rowView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Toast.makeText(context, "You Clicked "+result[position], Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "You Clicked " + result[position], Toast.LENGTH_LONG).show();
+            }
+        });
+
+        holder.img.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "You Clicked on button", Toast.LENGTH_LONG).show();
             }
         });
         return rowView;
