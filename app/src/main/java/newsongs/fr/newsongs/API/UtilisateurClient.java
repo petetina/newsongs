@@ -22,6 +22,9 @@ public interface UtilisateurClient {
     @GET("utilisateur/{id}")
     Call<Utilisateur> findById(@Path("id") int id);
 
+    @GET("utilisateur/{id}/friends")
+    Call<List<Utilisateur>> getFriendsById(@Path("id") int id);
+
     @FormUrlEncoded
     @POST("utilisateur")
     Call<Reponse> createUser(@Field("mail") String mail, @Field("pseudo") String pseudo, @Field("motdepasse") String motdepasse);
