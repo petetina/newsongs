@@ -7,36 +7,41 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.daimajia.slider.library.SliderLayout;
+import java.util.List;
+
+import newsongs.fr.newsongs.Models.Musique;
 
 /**
  * Created by daimajia on 14-5-29.
  */
 public class TransformerAdapter extends BaseAdapter{
     private Context mContext;
-    public TransformerAdapter(Context context) {
+    private List<Musique> playlists;
+
+    public TransformerAdapter(Context context, List<Musique> list) {
         mContext = context;
+        this.playlists = list;
     }
 
     @Override
     public int getCount() {
-        return SliderLayout.Transformer.values().length;
+        return playlists.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return SliderLayout.Transformer.values()[position].toString();
+    public Musique getItem(int position) {
+        return playlists.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return playlists.get(position).getIdmusique();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView t = (TextView)LayoutInflater.from(mContext).inflate(R.layout.item_slider,null);
-        t.setText(getItem(position).toString());
+        t.setText(getItem(position).getTitre());
         return t;
     }
 }

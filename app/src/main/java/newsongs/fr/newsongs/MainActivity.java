@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import newsongs.fr.newsongs.Models.Utilisateur;
+
 
 public class MainActivity extends BaseActivity {
 
@@ -23,8 +25,13 @@ public class MainActivity extends BaseActivity {
             Intent intent = new Intent(getApplicationContext(), FirstUseActivity.class);
             startActivity(intent);
         } else{
+
             setContentView(R.layout.activity_main);
+
+
             Toast.makeText(getApplicationContext(),idutilisateur+"",Toast.LENGTH_LONG).show();
+
+
         }
     }
 }
