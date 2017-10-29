@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,8 @@ import newsongs.fr.newsongs.R;
  */
 
 public class MyPlayerFragment extends Fragment {
-    private Button btnApres,btnPause,btnPlay,btnPrecedent;
+    private Button btnApres,btnPause,btnPrecedent;
+    public Button btnPlay;
     private TextView tx1,tx2,tx3;
 
     private double startTime = 0;
@@ -34,7 +36,7 @@ public class MyPlayerFragment extends Fragment {
     private int backwardTime = 5000;
 
     private SeekBar seekbar;
-    public static int oneTimeOnly = 0;
+    private static int oneTimeOnly = 0;
     private MediaPlayer mediaPlayer;
     private Handler myHandler = new Handler();
 
@@ -50,99 +52,24 @@ public class MyPlayerFragment extends Fragment {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                try {
-                    mediaPlayer.setDataSource("https://e-cdns-preview-5.dzcdn.net/stream/51afcde9f56a132096c0496cc95eb24b-4.mp3");
-                } catch (IllegalArgumentException e) {
-                    Toast.makeText(getActivity(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (SecurityException e) {
-                    Toast.makeText(getActivity(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (IllegalStateException e) {
-                    Toast.makeText(getActivity(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    mediaPlayer.prepare();
-                } catch (IllegalStateException e) {
-                    Toast.makeText(getActivity(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    Toast.makeText(getActivity(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                }
-
-                mediaPlayer.seekTo((int)currentTime);
-                mediaPlayer.start();
-
-                finalTime = mediaPlayer.getDuration();
-                startTime = mediaPlayer.getCurrentPosition();
-
-                if (oneTimeOnly == 0) {
-                    seekbar.setMax((int) finalTime);
-                    oneTimeOnly = 1;
-                }
-
-                tx2.setText(String.format("%d min, %d sec",
-                        TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
-                        TimeUnit.MILLISECONDS.toSeconds((long) finalTime) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
-                                        finalTime)))
-                );
-
-                tx1.setText(String.format("%d min, %d sec",
-                        TimeUnit.MILLISECONDS.toMinutes((long) startTime),
-                        TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
-                                        startTime)))
-                );
-
-                seekbar.setProgress((int)startTime);
-                myHandler.postDelayed(UpdateSongTime,100);
-                btnPause.setEnabled(true);
-                btnPlay.setEnabled(false);
+                Log.e("fragment player","play");
+                playMusic();
             }
         });
 
         btnPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer.pause();
-                currentTime = seekbar.getProgress();
-                btnPause.setEnabled(false);
-                btnPlay.setEnabled(true);
-            }
-        });
+                if(mediaPlayer !=null){
 
-        /*btnApres.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int temp = (int)startTime;
-
-                if((temp+forwardTime)<=finalTime){
-                    startTime = startTime + forwardTime;
-                    mediaPlayer.seekTo((int) startTime);
-                    Toast.makeText(getView(),"You have Jumped forward 5 seconds",Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getView(),"Cannot jump forward 5 seconds",Toast.LENGTH_SHORT).show();
+                    mediaPlayer.pause();
+                    currentTime = seekbar.getProgress();
+                    btnPause.setEnabled(false);
+                    btnPlay.setEnabled(true);
                 }
             }
         });
-/*
-        btnPrecedent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int temp = (int)startTime;
 
-                if((temp-backwardTime)>0){
-                    startTime = startTime - backwardTime;
-                    mediaPlayer.seekTo((int) startTime);
-                    Toast.makeText(getView(),"You have Jumped backward 5 seconds",Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getView(),"Cannot jump backward 5 seconds",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-*/
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -186,6 +113,86 @@ public class MyPlayerFragment extends Fragment {
         tx3 = (TextView)view.findViewById(R.id.textView4);
         seekbar = (SeekBar)view.findViewById(R.id.seekBar);
         seekbar.setClickable(false);
+
         btnPause.setEnabled(false);
+    }
+
+    public void playMusic(){
+        Log.e("playfragment", "playMusic");
+        if(mediaPlayer != null){
+
+            mediaPlayer.start();
+            myHandler.postDelayed(UpdateSongTime,100);
+            btnPause.setEnabled(true);
+            btnPlay.setEnabled(false);
+        }
+        else
+            Toast.makeText(getActivity(),"Veuillez sélectionner une musique d'abord !",Toast.LENGTH_LONG).show();
+    }
+
+    public void init(String url){
+        Log.e("playfragment", "init");
+        if(mediaPlayer == null) {
+            Log.e("init", "mediaPlayer null");
+            mediaPlayer = new MediaPlayer();
+        }
+        else{
+            Log.e("init","mediaPlayer isplaying");
+            mediaPlayer.stop();
+            currentTime =0;
+            startTime=0;
+            btnPlay.setEnabled(true);
+            btnPause.setEnabled(false);
+            mediaPlayer = new MediaPlayer();
+        }
+
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            mediaPlayer.setDataSource(url);
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(getActivity(), "Problème de chargement de la musique !", Toast.LENGTH_LONG).show();
+        } catch (SecurityException e) {
+            Toast.makeText(getActivity(), "Problème de chargement de la musique !", Toast.LENGTH_LONG).show();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Problème de chargement de la musique !", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            mediaPlayer.prepare();
+        } catch (IllegalStateException e) {
+            Toast.makeText(getActivity(), "Problème de chargement de la musique !", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            Toast.makeText(getActivity(), "Problème de chargement de la musique !", Toast.LENGTH_LONG).show();
+        }
+
+        mediaPlayer.seekTo((int)currentTime);
+
+        finalTime = mediaPlayer.getDuration();
+        startTime = mediaPlayer.getCurrentPosition();
+
+        if (oneTimeOnly == 0) {
+            seekbar.setMax((int) finalTime);
+            oneTimeOnly = 1;
+        }
+
+        tx2.setText(String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
+                TimeUnit.MILLISECONDS.toSeconds((long) finalTime) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
+                                finalTime)))
+        );
+
+        tx1.setText(String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes((long) startTime),
+                TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
+                                startTime)))
+        );
+
+        seekbar.setProgress((int)startTime);
     }
 }

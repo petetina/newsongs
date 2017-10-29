@@ -3,13 +3,15 @@ package newsongs.fr.newsongs;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
-import newsongs.fr.newsongs.Models.Utilisateur;
+import newsongs.fr.newsongs.Fragments.MyPlayerFragment;
 
-
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements PlayerInterface {
+    public static MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,5 +35,10 @@ public class MainActivity extends BaseActivity {
 
 
         }
+    }
+
+    public void init(String url){
+        Log.e("MainActivity","init");
+        ((MyPlayerFragment)(getFragmentManager().findFragmentById(R.id.fragmentplayer))).init(url);
     }
 }

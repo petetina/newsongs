@@ -1,5 +1,6 @@
 package newsongs.fr.newsongs.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,9 +27,11 @@ import java.util.List;
 
 import newsongs.fr.newsongs.API.PlaylistClient;
 import newsongs.fr.newsongs.API.ServiceGenerator;
+import newsongs.fr.newsongs.MainActivity;
 import newsongs.fr.newsongs.Models.Musique;
 import newsongs.fr.newsongs.Models.Playlist;
 import newsongs.fr.newsongs.Models.Utilisateur;
+import newsongs.fr.newsongs.PlayerInterface;
 import newsongs.fr.newsongs.R;
 import newsongs.fr.newsongs.Tools;
 import newsongs.fr.newsongs.TransformerAdapter;
@@ -43,6 +46,7 @@ import retrofit2.Response;
 public class MySliderFragment extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener{
     private SliderLayout mySlider;
     private ListView l;
+    private PlayerInterface mListener;
 
     private static Utilisateur currentUser = null;
     private List<Playlist> playlists;
@@ -53,6 +57,14 @@ public class MySliderFragment extends Fragment implements BaseSliderView.OnSlide
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_slider,container,false);
+
+        try {
+            mListener = (PlayerInterface) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " must implement OnButtonClickedListener ");
+        }
+
+
         mySlider = (SliderLayout)view.findViewById(R.id.slider);
         l = (ListView)view.findViewById(R.id.listMusic);
         playlists = new ArrayList<>();
@@ -121,13 +133,11 @@ public class MySliderFragment extends Fragment implements BaseSliderView.OnSlide
         l.setAdapter(new TransformerAdapter(getActivity(), musicList));
         l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Let's play this song ;)
-
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                //On initialise le player
+                mListener.init(musicList.get(position).getUrlpreview());
             }
         });
-
-        Toast.makeText(getActivity(),slider.getBundle().get("extra") + "",Toast.LENGTH_SHORT).show();
     }
 
     @Override

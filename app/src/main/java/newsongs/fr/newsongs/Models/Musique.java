@@ -9,6 +9,7 @@ public class Musique {
     private String titre;
     private String auteur;
     private String datecreation;
+    private String urlpreview;
 
     public int getIdmusique() {
         return idmusique;
@@ -40,5 +41,13 @@ public class Musique {
 
     public void setDatecreation(String datecreation) {
         this.datecreation = datecreation;
+    }
+
+    public String getUrlpreview() {
+        return urlpreview;
+    }
+
+    public void setUrlpreview(String urlpreview) {
+        this.urlpreview = urlpreview;
     }
 }
