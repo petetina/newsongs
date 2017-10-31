@@ -43,6 +43,7 @@ public class MainActivity extends BaseActivity implements PlayerInterface {
             setContentView(R.layout.no_connection);
     }
 
+
     public void init(String url, String titre){
         ((MyPlayerFragment)(getFragmentManager().findFragmentById(R.id.fragmentplayer))).init(url, titre);
     }

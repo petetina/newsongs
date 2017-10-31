@@ -5,6 +5,7 @@ import java.util.List;
 import newsongs.fr.newsongs.Models.Reponse;
 import newsongs.fr.newsongs.Models.Utilisateur;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -29,4 +30,7 @@ public interface UtilisateurClient {
     @FormUrlEncoded
     @POST("utilisateur")
     Call<Reponse> createUser(@Field("mail") String mail, @Field("pseudo") String pseudo, @Field("motdepasse") String motdepasse, @Field("idutilisateurdeezer") long idutilisateurdeezer);
+
+    @DELETE("utilisateur/{id}/friend/:idf")
+    Call<Reponse> deleteFriend(@Path("id") int idUser, @Path("idf") int idFriend);
 }

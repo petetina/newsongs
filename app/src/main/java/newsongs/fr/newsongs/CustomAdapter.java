@@ -1,6 +1,7 @@
 package newsongs.fr.newsongs;
         import android.app.Activity;
         import android.content.Context;
+        import android.content.SharedPreferences;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.View.OnClickListener;
@@ -13,7 +14,13 @@ package newsongs.fr.newsongs;
 
         import java.util.List;
 
+        import newsongs.fr.newsongs.API.ServiceGenerator;
+        import newsongs.fr.newsongs.API.UtilisateurClient;
+        import newsongs.fr.newsongs.Models.Reponse;
         import newsongs.fr.newsongs.Models.Utilisateur;
+        import retrofit2.Call;
+        import retrofit2.Callback;
+        import retrofit2.Response;
 
 public class CustomAdapter extends BaseAdapter{
 
@@ -62,6 +69,10 @@ public class CustomAdapter extends BaseAdapter{
         holder.tv=(TextView) rowView.findViewById(R.id.textView1);
         holder.img=(ImageButton) rowView.findViewById(R.id.imageButton1);
         holder.tv.setText(result.get(position).getPseudo());
+
+        //les actions faisable pour chaque amis
+
+        //voir en detail amis
         rowView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,10 +81,35 @@ public class CustomAdapter extends BaseAdapter{
             }
         });
 
+        //supprimer amis
         holder.img.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "You Clicked on button" + getItem(position).getPseudo(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "You Clicked on button" + getItem(position).getIdutilisateur(), Toast.LENGTH_LONG).show();
+
+                SharedPreferences settings = context.getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
+                int idutilisateur = settings.getInt("idutilisateur", -2); //2//Appel à notre API pour créer l'utilisateur
+                int friendToDelete = getItem(position).getIdutilisateur();
+
+                UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
+
+                Call<Reponse> call = service.deleteFriend(idutilisateur, friendToDelete);
+
+                call.enqueue(new Callback<Reponse>() {
+
+                    @Override
+                    public void onResponse(Call<Reponse> call, Response<Reponse> response) {
+                        if(response.code() == 200)
+                            Toast.makeText(context, "utilisateur supprimé " , Toast.LENGTH_LONG).show();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Reponse> call, Throwable t) {
+                        Toast.makeText(context, "pas ok", Toast.LENGTH_LONG).show();
+                    }
+                });
+
             }
         });
         return rowView;
