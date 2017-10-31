@@ -125,6 +125,7 @@ public class FirstUseActivity extends BaseActivity {
                                         Log.e("idutilisateur", Long.toString(currentUser.getId()));
 
                                         Intent intent = new Intent(FirstUseActivity.this, MainActivity.class);
+                                        intent.putExtra("firstuse",true);
                                         startActivity(intent);
                                     }
                                 }

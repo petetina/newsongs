@@ -11,7 +11,6 @@ import android.widget.Toast;
 import newsongs.fr.newsongs.Fragments.MyPlayerFragment;
 
 public class MainActivity extends BaseActivity implements PlayerInterface {
-    public static MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +27,15 @@ public class MainActivity extends BaseActivity implements PlayerInterface {
             if (idutilisateur == -2) {
                 Intent intent = new Intent(getApplicationContext(), FirstUseActivity.class);
                 startActivity(intent);
+                finish();
             } else {
 
-                setContentView(R.layout.activity_main);
+                if(getIntent() != null){
+                    setContentView(R.layout.no_friends);
+                }else
+                    setContentView(R.layout.activity_main);
 
-
-                Toast.makeText(getApplicationContext(), idutilisateur + "", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), idutilisateur + "", Toast.LENGTH_LONG).show();
 
 
             }
