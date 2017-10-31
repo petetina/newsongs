@@ -38,7 +38,7 @@ public class MainActivity extends BaseActivity implements PlayerInterface {
     }
 
     public void init(String url){
-        Log.e("MainActivity","init");
+        Log.e("MainActivity", "init");
         ((MyPlayerFragment)(getFragmentManager().findFragmentById(R.id.fragmentplayer))).init(url);
     }
 }
