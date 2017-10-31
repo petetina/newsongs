@@ -17,28 +17,31 @@ public class MainActivity extends BaseActivity implements PlayerInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //On teste si l'utilisateur de l'application s'est déjà authentifié
-        SharedPreferences settings = getApplicationContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
-        int idutilisateur = settings.getInt("idutilisateur", -2); //2
+        if(Tools.isConnected(this)) {
 
-        //Si l'idutilisateur est -2, alors c'est la premièr utilisation de l'appli
+            //On teste si l'utilisateur de l'application s'est déjà authentifié
+            SharedPreferences settings = getApplicationContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
+            int idutilisateur = settings.getInt("idutilisateur", -2); //2
 
-        if (idutilisateur == -2) {
-            Intent intent = new Intent(getApplicationContext(), FirstUseActivity.class);
-            startActivity(intent);
-        } else{
+            //Si l'idutilisateur est -2, alors c'est la premièr utilisation de l'appli
 
-            setContentView(R.layout.activity_main);
+            if (idutilisateur == -2) {
+                Intent intent = new Intent(getApplicationContext(), FirstUseActivity.class);
+                startActivity(intent);
+            } else {
+
+                setContentView(R.layout.activity_main);
 
 
-            Toast.makeText(getApplicationContext(),idutilisateur+"",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), idutilisateur + "", Toast.LENGTH_LONG).show();
 
 
-        }
+            }
+        }else
+            setContentView(R.layout.no_connection);
     }
 
-    public void init(String url){
-        Log.e("MainActivity","init");
-        ((MyPlayerFragment)(getFragmentManager().findFragmentById(R.id.fragmentplayer))).init(url);
+    public void init(String url, String titre){
+        ((MyPlayerFragment)(getFragmentManager().findFragmentById(R.id.fragmentplayer))).init(url, titre);
     }
 }

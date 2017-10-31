@@ -135,7 +135,7 @@ public class MySliderFragment extends Fragment implements BaseSliderView.OnSlide
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 //On initialise le player
-                mListener.init(musicList.get(position).getUrlpreview());
+                mListener.init(musicList.get(position).getUrlpreview(),musicList.get(position).getTitre());
             }
         });
     }

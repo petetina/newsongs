@@ -5,5 +5,5 @@ package newsongs.fr.newsongs;
  */
 
 public interface PlayerInterface {
-    void init(String url);
+    void init(String url, String titre);
 }

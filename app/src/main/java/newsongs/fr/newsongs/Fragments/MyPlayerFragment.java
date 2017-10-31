@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,7 @@ import newsongs.fr.newsongs.R;
 public class MyPlayerFragment extends Fragment {
     private Button btnApres,btnPause,btnPrecedent;
     public Button btnPlay;
-    private TextView tx1,tx2,tx3;
+    private TextView tx1,tx2,lblTitre;
 
     private double startTime = 0;
     private double currentTime = 0;
@@ -61,11 +62,10 @@ public class MyPlayerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(mediaPlayer !=null){
-
                     mediaPlayer.pause();
                     currentTime = seekbar.getProgress();
-                    btnPause.setEnabled(false);
-                    btnPlay.setEnabled(true);
+                    btnPause.setVisibility(View.GONE);
+                    btnPlay.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -94,7 +94,7 @@ public class MyPlayerFragment extends Fragment {
     private Runnable UpdateSongTime = new Runnable() {
         public void run() {
             startTime = mediaPlayer.getCurrentPosition();
-            tx1.setText(String.format("%d min, %d sec",
+            tx1.setText(String.format("%d : %d",
                     TimeUnit.MILLISECONDS.toMinutes((long) startTime),
                     TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
                             TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
@@ -102,6 +102,7 @@ public class MyPlayerFragment extends Fragment {
             );
             seekbar.setProgress((int)startTime);
             myHandler.postDelayed(this, 100);
+
         }
     };
     private void hook(View view){
@@ -110,11 +111,12 @@ public class MyPlayerFragment extends Fragment {
         btnPause = (Button) view.findViewById(R.id.btnPause);
         tx1 = (TextView)view.findViewById(R.id.textView2);
         tx2 = (TextView)view.findViewById(R.id.textView3);
-        tx3 = (TextView)view.findViewById(R.id.textView4);
+        lblTitre = (TextView)view.findViewById(R.id.lblTitre);
+        lblTitre.setMovementMethod(new ScrollingMovementMethod());
         seekbar = (SeekBar)view.findViewById(R.id.seekBar);
         seekbar.setClickable(false);
 
-        btnPause.setEnabled(false);
+        btnPause.setVisibility(View.GONE);
     }
 
     public void playMusic(){
@@ -123,32 +125,27 @@ public class MyPlayerFragment extends Fragment {
 
             mediaPlayer.start();
             myHandler.postDelayed(UpdateSongTime,100);
-            btnPause.setEnabled(true);
-            btnPlay.setEnabled(false);
+            btnPause.setVisibility(View.VISIBLE);
+            btnPlay.setVisibility(View.GONE);
         }
         else
             Toast.makeText(getActivity(),"Veuillez sélectionner une musique d'abord !",Toast.LENGTH_LONG).show();
     }
 
-    public void init(String url){
-        Log.e("playfragment", "init");
-        if(mediaPlayer == null) {
-            Log.e("init", "mediaPlayer null");
-            mediaPlayer = new MediaPlayer();
-        }
-        else{
-            Log.e("init","mediaPlayer isplaying");
+    public void init(String url, String titre){
+        if(mediaPlayer != null) {
             mediaPlayer.stop();
             currentTime =0;
             startTime=0;
-            btnPlay.setEnabled(true);
-            btnPause.setEnabled(false);
-            mediaPlayer = new MediaPlayer();
+            btnPlay.setVisibility(View.VISIBLE);
+            btnPause.setVisibility(View.GONE);
         }
 
+        mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             mediaPlayer.setDataSource(url);
+            lblTitre.setText(titre);
         } catch (IllegalArgumentException e) {
             Toast.makeText(getActivity(), "Problème de chargement de la musique !", Toast.LENGTH_LONG).show();
         } catch (SecurityException e) {
@@ -179,14 +176,14 @@ public class MyPlayerFragment extends Fragment {
             oneTimeOnly = 1;
         }
 
-        tx2.setText(String.format("%d min, %d sec",
+        tx2.setText(String.format("%d : %d ",
                 TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
                 TimeUnit.MILLISECONDS.toSeconds((long) finalTime) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
                                 finalTime)))
         );
 
-        tx1.setText(String.format("%d min, %d sec",
+        tx1.setText(String.format("%d : %d",
                 TimeUnit.MILLISECONDS.toMinutes((long) startTime),
                 TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
