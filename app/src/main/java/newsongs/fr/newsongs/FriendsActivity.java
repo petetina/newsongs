@@ -54,8 +54,6 @@ public class FriendsActivity extends BaseActivity {
 
             @Override
             public void onResponse(Call<List<Utilisateur>> call, Response<List<Utilisateur>> response) {
-                Toast.makeText(getApplicationContext(), response.body().get(0).getIdutilisateur() + "", Toast.LENGTH_LONG).show();
-
                 lv.setAdapter(new CustomAdapter(FriendsActivity.this, response.body()));
             }
 
@@ -65,4 +63,5 @@ public class FriendsActivity extends BaseActivity {
             }
         });
     }
+
 }
