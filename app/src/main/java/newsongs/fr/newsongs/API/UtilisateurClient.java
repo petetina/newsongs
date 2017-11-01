@@ -14,11 +14,8 @@ import retrofit2.http.Path;
 
 public interface UtilisateurClient {
 
-    @GET("utilisateur")
-    Call<List<Utilisateur>> findAll();
-
-    @GET("utilisateur/{id}")
-    Call<Utilisateur> findById(@Path("id") int id);
+    @GET("utilisateur/pseudo/{pseudo}")
+    Call<List<Utilisateur>> findAllByPseudo(@Path("pseudo") String pseudo);
 
     @GET("utilisateur/{id}/friends")
     Call<List<Utilisateur>> getFriendsById(@Path("id") int id);
@@ -31,6 +28,10 @@ public interface UtilisateurClient {
     @POST("utilisateur")
     Call<Reponse> createUser(@Field("mail") String mail, @Field("pseudo") String pseudo, @Field("motdepasse") String motdepasse, @Field("idutilisateurdeezer") long idutilisateurdeezer);
 
-    @DELETE("utilisateur/{id}/friend/:idf")
+    @FormUrlEncoded
+    @POST("utilisateur/{idutilisateur1}/friend/{idutilisateur2}")
+    Call<Reponse> addFriend(@Field("idutilisateur1")int idutilisateur1, @Field("idutilisateur2")int idutilisateur2);
+
+    @DELETE("utilisateur/{id}/friend/{idf}")
     Call<Reponse> deleteFriend(@Path("id") int idUser, @Path("idf") int idFriend);
 }

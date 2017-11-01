@@ -98,9 +98,9 @@ public class FirstUseActivity extends BaseActivity {
                     public void onResult(final Object result, final Object requestId) {
                         if (result instanceof User) {
                             final User currentUser = (User)result;
-                            Log.e("idutilisateur",currentUser.getId()+"");
+                            Log.e("idutilisateurdeezer",currentUser.getId()+"");
 
-                            //Une fois qu'on a récupéré l'id de l'utilisateur courant,
+                            //Une fois qu'on a récupéré l'idutilisateurdeezer de l'utilisateur courant,
                             //on va créer un utilisateur dans notre bdd (si l'utilisateur n'existe pas déjà dans la bdd)
                             UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
                             Call<Reponse> call;
@@ -109,10 +109,8 @@ public class FirstUseActivity extends BaseActivity {
                             call.enqueue(new Callback<Reponse>() {
                                 @Override
                                 public void onResponse(Call<Reponse> call, Response<Reponse> response) {
-                                    if(response.code() == 201 || response.code() == 200) {
-                                        if(response.code()==200)
-                                            Toast.makeText(getApplicationContext(), "Enfin de retour !", Toast.LENGTH_LONG).show();
 
+                                    if(response.code() == 201 || response.code() == 200) {
                                         //On sauvegarde l'id de l'utilisateur dans les préférences partagées
                                         //On met à jour les préférences partagées
                                         SharedPreferences settings;
@@ -120,19 +118,28 @@ public class FirstUseActivity extends BaseActivity {
                                         settings = getApplicationContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
                                         editor = settings.edit(); //2
 
-                                        editor.putInt("idutilisateur", (int) (currentUser.getId())); //3
+                                        editor.putInt("idutilisateur", Integer.parseInt(response.body().getMessage())); //3
+                                        Log.e("idutilisateur", response.body().getMessage());
+
+                                        editor.putLong("idutilisateurdeezer", currentUser.getId()); //3
                                         editor.commit(); //4
-                                        Log.e("idutilisateur", Long.toString(currentUser.getId()));
+                                        Log.e("idutilisateurdeezer", Long.toString(currentUser.getId()));
 
                                         Intent intent = new Intent(FirstUseActivity.this, MainActivity.class);
                                         intent.putExtra("firstuse",true);
                                         startActivity(intent);
+                                        finish();
+                                        if(response.code()==200)
+                                            Toast.makeText(getApplicationContext(), "Enfin de retour !", Toast.LENGTH_LONG).show();
+
+
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<Reponse> call, Throwable t) {
-                                    Toast.makeText(getApplicationContext(),"Erreur interne.",Toast.LENGTH_LONG).show();
+                                    t.printStackTrace();
+                                    Toast.makeText(getApplicationContext(),t.getMessage()+"Erreur interne.",Toast.LENGTH_LONG).show();
                                 }
                             });
 

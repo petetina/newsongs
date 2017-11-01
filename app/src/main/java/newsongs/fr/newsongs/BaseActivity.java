@@ -32,11 +32,6 @@ public class BaseActivity extends AppCompatActivity {
         mDeezerConnect = new DeezerConnect(this, DEEZER_API_KEY);
     }
 
-    @Override
-    public void onBackPressed() {
-
-    }
-
     /**
      * Handle errors by displaying a toast and logging.
      *

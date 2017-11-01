@@ -14,6 +14,10 @@ public class Utilisateur {
     private String motdepasse;
     private List<Utilisateur> amis;
 
+    //Ce champs est utilisé pour la recherche des amis.
+    // true si l'utilisateur est ami avec celui qui est connecté, false sinon
+    private boolean estAmi;
+
     public int getIdutilisateur() {
         return idutilisateur;
     }
@@ -52,5 +56,9 @@ public class Utilisateur {
 
     public void setMotdepasse(String motdepasse) {
         this.motdepasse = motdepasse;
+    }
+
+    public boolean estAmi() {
+        return estAmi;
     }
 }

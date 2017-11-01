@@ -1,6 +1,5 @@
 package newsongs.fr.newsongs.Fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -27,14 +24,12 @@ import java.util.List;
 
 import newsongs.fr.newsongs.API.PlaylistClient;
 import newsongs.fr.newsongs.API.ServiceGenerator;
-import newsongs.fr.newsongs.MainActivity;
 import newsongs.fr.newsongs.Models.Musique;
 import newsongs.fr.newsongs.Models.Playlist;
-import newsongs.fr.newsongs.Models.Utilisateur;
 import newsongs.fr.newsongs.PlayerInterface;
 import newsongs.fr.newsongs.R;
 import newsongs.fr.newsongs.Tools;
-import newsongs.fr.newsongs.TransformerAdapter;
+import newsongs.fr.newsongs.Adapters.TransformerAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,8 +42,6 @@ public class MySliderFragment extends Fragment implements BaseSliderView.OnSlide
     private SliderLayout mySlider;
     private ListView l;
     private PlayerInterface mListener;
-
-    private static Utilisateur currentUser = null;
     private List<Playlist> playlists;
 
     public MySliderFragment(){}
@@ -70,10 +63,10 @@ public class MySliderFragment extends Fragment implements BaseSliderView.OnSlide
         playlists = new ArrayList<>();
 
         SharedPreferences settings = getActivity().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
-        int idutilisateur = settings.getInt("idutilisateur", -2); //2
+        int idutilisateurdeezer = settings.getInt("idutilisateurdeezer", -2); //2
 
         PlaylistClient service = ServiceGenerator.createService(PlaylistClient.class);
-        Call<List<Playlist>> call = service.getPlaylists(idutilisateur);
+        Call<List<Playlist>> call = service.getPlaylists(idutilisateurdeezer);
         call.enqueue(new Callback<List<Playlist>>() {
             @Override
             public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
@@ -95,12 +88,7 @@ public class MySliderFragment extends Fragment implements BaseSliderView.OnSlide
         for(Playlist p : list){
             url_maps.put(p.getNom(),p.getUrlimage());
         }
-        /*
-        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
-        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
-        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
-        */
+
         int i=0;
         for(String name : url_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(getActivity());

@@ -1,4 +1,4 @@
-package newsongs.fr.newsongs;
+package newsongs.fr.newsongs.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import newsongs.fr.newsongs.Models.Musique;
+import newsongs.fr.newsongs.R;
 
 /**
  * Created by daimajia on 14-5-29.

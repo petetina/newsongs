@@ -25,4 +25,5 @@
     <string name="contentDescriptionImage">background</string>
     <string name="no_connection">Veuillez vous connecter à Internet et redémarrer l\'appli !</string>
     <string name="no_friends">Bienvenue sur l\'application :)\nAjoute des amis pour profiter de l\'appli :) </string>
+    <string name="no_playlists">Il n\'a pas de playlists à afficher.\nDemandez à vos amis de publier :)</string>
 </resources>

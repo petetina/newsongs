@@ -24,8 +24,6 @@ public class RegisterActivity extends BaseActivity {
     private Button btnInscription;
     private TextView txtPseudo;
     private TextView txtEmail;
-    private TextView txtPrenom;
-    private TextView txtNom;
     private TextView txtMotDePasse;
 
     @Override
@@ -37,6 +35,7 @@ public class RegisterActivity extends BaseActivity {
         btnInscription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnInscription.setEnabled(false);
                 //Appel à notre API pour créer l'utilisateur
                 UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
                 Utilisateur utilisateur = new Utilisateur();
@@ -66,6 +65,7 @@ public class RegisterActivity extends BaseActivity {
                             startActivity(intent);
                         }
                         else{
+                            btnInscription.setEnabled(true);
                             Toast.makeText(getApplicationContext(), "L'inscription a échoué ! Essayez un nouveau pseudo", Toast.LENGTH_SHORT).show();
                         }
 
@@ -75,6 +75,7 @@ public class RegisterActivity extends BaseActivity {
                     @Override
                     public void onFailure(Call<Reponse> call, Throwable t) {
                         Log.e("fail",t.getMessage());
+                        btnInscription.setEnabled(true);
                     }
                 });
 
@@ -87,8 +88,6 @@ public class RegisterActivity extends BaseActivity {
         btnInscription  =(Button)findViewById(R.id.btnInscription2);
         txtPseudo = (TextView)findViewById(R.id.txtPseudo);
         txtEmail = (TextView)findViewById(R.id.txtEmail);
-        txtPrenom = (TextView)findViewById(R.id.txtPrenom);
-        txtNom = (TextView)findViewById(R.id.txtNom);
         txtMotDePasse = (TextView)findViewById(R.id.txtMotDePasse);
     }
 }
