@@ -57,14 +57,12 @@ public class FriendsTab1Fragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Log.e("onClick","cliqué");
                 if(idutilisateur != -2 && !searchView.getQuery().toString().isEmpty()){
                     UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
                     Call<List<Utilisateur>> call = service.findAllByPseudo(idutilisateur,searchView.getQuery().toString());
                     call.enqueue(new Callback<List<Utilisateur>>() {
                         @Override
                         public void onResponse(Call<List<Utilisateur>> call, Response<List<Utilisateur>> response) {
-                            Log.e("onResponseQuery",response.body().size()+"");
                             if(response.body().isEmpty()){
                                 lv.setAdapter(new CustomAdapter(getActivity(),new ArrayList<Utilisateur>()));
                                 Toast.makeText(getContext(),"Aucun résultat !",Toast.LENGTH_LONG).show();
@@ -76,7 +74,6 @@ public class FriendsTab1Fragment extends Fragment {
 
                         @Override
                         public void onFailure(Call<List<Utilisateur>> call, Throwable t) {
-                            Log.e("onFailureQuery",t.getMessage());
                             Toast.makeText(getContext(),"Erreur de recherche !",Toast.LENGTH_LONG).show();
                         }
                     });

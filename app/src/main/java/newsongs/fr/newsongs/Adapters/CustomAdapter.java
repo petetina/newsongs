@@ -2,6 +2,7 @@ package newsongs.fr.newsongs.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,7 +49,7 @@ public class CustomAdapter extends BaseAdapter{
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return result.get(position).getIdutilisateur();
     }
 
     public class Holder
@@ -57,7 +58,7 @@ public class CustomAdapter extends BaseAdapter{
         ImageButton img;
     }
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         Holder holder=new Holder();
         View rowView;
@@ -73,7 +74,7 @@ public class CustomAdapter extends BaseAdapter{
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Toast.makeText(context, "You Clicked " + result.get(position).getPseudo(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "You Clicked " + result.get(position).getPseudo(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -92,7 +93,7 @@ public class CustomAdapter extends BaseAdapter{
 
                     SharedPreferences settings = context.getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
                     int idutilisateur = settings.getInt("idutilisateur", -2); //2//Appel à notre API pour créer l'utilisateur
-                    int friendToDelete = getItem(position).getIdutilisateur();
+                    int friendToDelete = (int)getItemId(position);
 
                     UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
 
@@ -123,19 +124,23 @@ public class CustomAdapter extends BaseAdapter{
                 public void onClick(View view) {
                     SharedPreferences settings = context.getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
                     int idutilisateur = settings.getInt("idutilisateur", -2); //2//Appel à notre API pour créer l'utilisateur
-                    int friendToDelete = getItem(position).getIdutilisateur();
+                    int friendToAdd = (int)getItemId(position);
 
+                    Log.e("addFriend",idutilisateur + ","+friendToAdd);
                     UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
 
-                    Call<Reponse> call = service.addFriend(idutilisateur, friendToDelete);
+                    Call<Reponse> call = service.addFriend(idutilisateur, friendToAdd);
 
                     call.enqueue(new Callback<Reponse>() {
 
                         @Override
                         public void onResponse(Call<Reponse> call, Response<Reponse> response) {
-                            if(response.code() == 200)
-                                Toast.makeText(context, "utilisateur ajouté" , Toast.LENGTH_LONG).show();
-
+                            if(response.code()==201 || response.code() == 200)
+                            {
+                                Toast.makeText(context,response.body().getMessage(),Toast.LENGTH_LONG).show();
+                            }
+                            else
+                                Toast.makeText(context,"addFriend"+response.code() + ", ",Toast.LENGTH_LONG).show();
                         }
 
                         @Override

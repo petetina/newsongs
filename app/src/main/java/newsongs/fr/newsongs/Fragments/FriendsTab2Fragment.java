@@ -50,7 +50,7 @@ public class FriendsTab2Fragment extends Fragment {
 
                 @Override
                 public void onResponse(Call<List<Utilisateur>> call, Response<List<Utilisateur>> response) {
-                    Log.e("onResponse",response.code() + "");
+                    Log.e("onResponseTab2",response.code() + "");
                     if(response.code() == 200){
                         List<Utilisateur> list = response.body();
                         if(!response.body().isEmpty()){
@@ -66,7 +66,8 @@ public class FriendsTab2Fragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<List<Utilisateur>> call, Throwable t) {
-                    Toast.makeText(getContext(), "pas ok", Toast.LENGTH_LONG).show();
+                    t.printStackTrace();
+                    Toast.makeText(getContext(), "pas ok "+ t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         }

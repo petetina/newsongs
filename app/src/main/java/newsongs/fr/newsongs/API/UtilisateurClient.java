@@ -28,9 +28,8 @@ public interface UtilisateurClient {
     @POST("utilisateur")
     Call<Reponse> createUser(@Field("mail") String mail, @Field("pseudo") String pseudo, @Field("motdepasse") String motdepasse, @Field("idutilisateurdeezer") long idutilisateurdeezer);
 
-    @FormUrlEncoded
     @POST("utilisateur/{idutilisateur1}/friend/{idutilisateur2}")
-    Call<Reponse> addFriend(@Field("idutilisateur1")int idutilisateur1, @Field("idutilisateur2")int idutilisateur2);
+    Call<Reponse> addFriend(@Path("idutilisateur1")int idutilisateur1, @Path("idutilisateur2")int idutilisateur2);
 
     @DELETE("utilisateur/{id}/friend/{idf}")
     Call<Reponse> deleteFriend(@Path("id") int idUser, @Path("idf") int idFriend);
