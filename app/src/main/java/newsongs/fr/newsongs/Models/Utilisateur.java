@@ -16,7 +16,7 @@ public class Utilisateur {
 
     //Ce champs est utilisé pour la recherche des amis.
     // true si l'utilisateur est ami avec celui qui est connecté, false sinon
-    private boolean estAmi;
+    private boolean estunami;
 
     public int getIdutilisateur() {
         return idutilisateur;
@@ -59,6 +59,6 @@ public class Utilisateur {
     }
 
     public boolean estAmi() {
-        return estAmi;
+        return estunami;
     }
 }

@@ -14,8 +14,8 @@ import retrofit2.http.Path;
 
 public interface UtilisateurClient {
 
-    @GET("utilisateur/pseudo/{pseudo}")
-    Call<List<Utilisateur>> findAllByPseudo(@Path("pseudo") String pseudo);
+    @GET("utilisateur/{idutilisateur}/pseudo/{pseudo}")
+    Call<List<Utilisateur>> findAllByPseudo(@Path("idutilisateur")int idutilisateur,@Path("pseudo") String pseudo);
 
     @GET("utilisateur/{id}/friends")
     Call<List<Utilisateur>> getFriendsById(@Path("id") int id);
