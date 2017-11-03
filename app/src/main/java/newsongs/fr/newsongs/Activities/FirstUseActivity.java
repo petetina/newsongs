@@ -1,4 +1,4 @@
-package newsongs.fr.newsongs;
+package newsongs.fr.newsongs.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,11 +18,11 @@ import com.deezer.sdk.network.request.DeezerRequestFactory;
 import com.deezer.sdk.network.request.event.DeezerError;
 import com.deezer.sdk.network.request.event.JsonRequestListener;
 
-import java.io.IOException;
-
 import newsongs.fr.newsongs.API.ServiceGenerator;
 import newsongs.fr.newsongs.API.UtilisateurClient;
 import newsongs.fr.newsongs.Models.Reponse;
+import newsongs.fr.newsongs.R;
+import newsongs.fr.newsongs.Tools;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

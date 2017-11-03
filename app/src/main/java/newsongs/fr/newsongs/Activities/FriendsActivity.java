@@ -1,23 +1,21 @@
-package newsongs.fr.newsongs;
+package newsongs.fr.newsongs.Activities;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 
-import newsongs.fr.newsongs.Fragments.PagerFragment;
+import newsongs.fr.newsongs.Adapters.PagerAdapter;
+import newsongs.fr.newsongs.R;
 
 public class FriendsActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private String[] tabs = new String[]{"Rechercher un ami","Mes amis"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_friends);
@@ -36,15 +34,12 @@ public class FriendsActivity extends AppCompatActivity implements TabLayout.OnTa
         viewPager = (ViewPager) findViewById(R.id.pager);
 
         //Creating our pager adapter
-        PagerFragment adapter = new PagerFragment(getSupportFragmentManager(), tabs.length);
+        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
 
         //Adding adapter to pager
         viewPager.setAdapter(adapter);
+
         tabLayout.setupWithViewPager(viewPager);
-
-
-        for(int i=0; i<tabs.length;i++)
-            tabLayout.getTabAt(i).setText(tabs[i]);
 
 
         //Adding onTabSelectedListener to swipe views

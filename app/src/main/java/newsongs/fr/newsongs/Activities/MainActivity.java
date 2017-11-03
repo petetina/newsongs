@@ -1,11 +1,9 @@
-package newsongs.fr.newsongs;
+package newsongs.fr.newsongs.Activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -14,10 +12,11 @@ import java.util.List;
 
 import newsongs.fr.newsongs.API.PlaylistClient;
 import newsongs.fr.newsongs.API.ServiceGenerator;
-import newsongs.fr.newsongs.API.UtilisateurClient;
 import newsongs.fr.newsongs.Fragments.MyPlayerFragment;
+import newsongs.fr.newsongs.Interfaces.PlayerInterface;
 import newsongs.fr.newsongs.Models.Playlist;
-import newsongs.fr.newsongs.Models.Utilisateur;
+import newsongs.fr.newsongs.R;
+import newsongs.fr.newsongs.Tools;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,23 +58,7 @@ public class MainActivity extends BaseActivity implements PlayerInterface {
                 startActivity(intent);
                 finish();
             } else {
-                Toast.makeText(getApplicationContext(),idutilisateur+"",Toast.LENGTH_LONG).show();
-                PlaylistClient service = ServiceGenerator.createService(PlaylistClient.class);
-                Call<List<Playlist>> call = service.getPlaylists(idutilisateur);
-                call.enqueue(new Callback<List<Playlist>>() {
-                    @Override
-                    public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
-                        if(response.body().isEmpty())
-                            setContentView(R.layout.no_playlists);
-                        else
-                            setContentView(R.layout.activity_main);
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Playlist>> call, Throwable t) {
-
-                    }
-                });
+                setContentView(R.layout.activity_main);
 
             }
         }else

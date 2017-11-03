@@ -23,6 +23,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="contentDescriptionImage">background</string>
     <string name="no_connection">Veuillez vous connecter à Internet et redémarrer l\'appli !</string>
-    <string name="no_friends">Bienvenue sur l\'application :)\nAjoute des amis pour profiter de l\'appli :) </string>
+    <string name="no_friends">La liste d\'amis est vide ! </string>
     <string name="no_playlists">Il n\'a pas de playlists à afficher.\nDemandez à vos amis de publier :)</string>
+    <string name="no_invitations">Vous n\'avez aucune invitation pour le moment !</string>
 </resources>

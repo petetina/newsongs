@@ -7,17 +7,17 @@ import java.util.List;
  */
 
 public class Playlist {
-    private int idplaylist;
+    private long idplaylist;
     private String nom;
     private String datecreation;
     private String urlimage;
     private List<Musique> musiques;
 
-    public int getIdplaylist() {
+    public long getIdplaylist() {
         return idplaylist;
     }
 
-    public void setIdplaylist(int idplaylist) {
+    public void setIdplaylist(long idplaylist) {
         this.idplaylist = idplaylist;
     }
 

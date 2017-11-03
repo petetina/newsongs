@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,16 +22,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FirstUseActivity"
+            android:name=".Activities.FirstUseActivity"
             android:configChanges="orientation|screenSize"/>
         <activity
-            android:name=".BaseActivity"
+            android:name=".Activities.BaseActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Activities.RegisterActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".FriendsActivity"
+            android:name=".Activities.FriendsActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/MyAppTheme"/>
     </application>

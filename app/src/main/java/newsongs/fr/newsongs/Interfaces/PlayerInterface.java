@@ -1,4 +1,4 @@
-package newsongs.fr.newsongs;
+package newsongs.fr.newsongs.Interfaces;
 
 /**
  * Created by antoine on 29/10/17.

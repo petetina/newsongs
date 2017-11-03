@@ -1,4 +1,4 @@
-package newsongs.fr.newsongs;
+package newsongs.fr.newsongs.Activities;
 
 import android.graphics.Color;
 import android.support.v7.app.ActionBar;
@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.deezer.sdk.model.Permissions;
 import com.deezer.sdk.network.connect.DeezerConnect;
+
+import newsongs.fr.newsongs.R;
 
 //Activite mere (toutes les activites extend celle ci)
 public class BaseActivity extends AppCompatActivity {

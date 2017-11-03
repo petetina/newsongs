@@ -1,4 +1,4 @@
-package newsongs.fr.newsongs;
+package newsongs.fr.newsongs.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +10,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.deezer.sdk.model.User;
-
 import newsongs.fr.newsongs.API.ServiceGenerator;
 import newsongs.fr.newsongs.API.UtilisateurClient;
 import newsongs.fr.newsongs.Models.Reponse;
 import newsongs.fr.newsongs.Models.Utilisateur;
+import newsongs.fr.newsongs.R;
+import newsongs.fr.newsongs.Tools;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

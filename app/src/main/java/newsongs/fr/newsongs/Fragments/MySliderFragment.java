@@ -26,7 +26,7 @@ import newsongs.fr.newsongs.API.PlaylistClient;
 import newsongs.fr.newsongs.API.ServiceGenerator;
 import newsongs.fr.newsongs.Models.Musique;
 import newsongs.fr.newsongs.Models.Playlist;
-import newsongs.fr.newsongs.PlayerInterface;
+import newsongs.fr.newsongs.Interfaces.PlayerInterface;
 import newsongs.fr.newsongs.R;
 import newsongs.fr.newsongs.Tools;
 import newsongs.fr.newsongs.Adapters.TransformerAdapter;
@@ -58,15 +58,15 @@ public class MySliderFragment extends Fragment implements BaseSliderView.OnSlide
         }
 
 
-        mySlider = (SliderLayout)view.findViewById(R.id.slider);
-        l = (ListView)view.findViewById(R.id.listMusic);
+        mySlider = view.findViewById(R.id.slider);
+        l = view.findViewById(R.id.listMusic);
         playlists = new ArrayList<>();
 
         SharedPreferences settings = getActivity().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
-        int idutilisateurdeezer = settings.getInt("idutilisateurdeezer", -2); //2
+        int idutilisateur = settings.getInt("idutilisateur", -2); //2
 
         PlaylistClient service = ServiceGenerator.createService(PlaylistClient.class);
-        Call<List<Playlist>> call = service.getPlaylists(idutilisateurdeezer);
+        Call<List<Playlist>> call = service.getPlaylists(idutilisateur);
         call.enqueue(new Callback<List<Playlist>>() {
             @Override
             public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
@@ -84,28 +84,25 @@ public class MySliderFragment extends Fragment implements BaseSliderView.OnSlide
     }
 
     private void populate(List<Playlist> list){
-        HashMap<String,String> url_maps = new HashMap<String, String>();
-        for(Playlist p : list){
-            url_maps.put(p.getNom(),p.getUrlimage());
-        }
+        Log.e("sliderfragment","populate"+list.size());
 
-        int i=0;
-        for(String name : url_maps.keySet()){
+        for(int i=0; i<list.size();i++){
+            Playlist p = list.get(i);
+
             TextSliderView textSliderView = new TextSliderView(getActivity());
             // initialize a SliderLayout
             textSliderView
-                    .description(name)
-                    .image(url_maps.get(name))
+                    .description(p.getNom())
+                    .image(p.getUrlimage())
                     .setScaleType(BaseSliderView.ScaleType.Fit)
                     .setOnSliderClickListener(this);
 
             //add your extra information
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle().putInt("position",i);
-            textSliderView.getBundle().putString("nom",name);
 
             mySlider.addSlider(textSliderView);
-            i++;
+
         }
         mySlider.setPresetTransformer(SliderLayout.Transformer.ZoomOutSlide);
         mySlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);

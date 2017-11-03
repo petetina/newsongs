@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,7 @@ public class FriendsTab1Fragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Toast.makeText(getContext(),"onCreateView1",Toast.LENGTH_SHORT).show();
         View view = inflater.inflate(R.layout.tabfriends1, container, false);
 
         SharedPreferences settings = getContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
@@ -57,27 +57,7 @@ public class FriendsTab1Fragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                if(idutilisateur != -2 && !searchView.getQuery().toString().isEmpty()){
-                    UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
-                    Call<List<Utilisateur>> call = service.findAllByPseudo(idutilisateur,searchView.getQuery().toString());
-                    call.enqueue(new Callback<List<Utilisateur>>() {
-                        @Override
-                        public void onResponse(Call<List<Utilisateur>> call, Response<List<Utilisateur>> response) {
-                            if(response.body().isEmpty()){
-                                lv.setAdapter(new CustomAdapter(getActivity(),new ArrayList<Utilisateur>()));
-                                Toast.makeText(getContext(),"Aucun résultat !",Toast.LENGTH_LONG).show();
-                            }
-                            else
-                                lv.setAdapter(new CustomAdapter(getActivity(),response.body()));
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<Utilisateur>> call, Throwable t) {
-                            Toast.makeText(getContext(),"Erreur de recherche !",Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
+                getDatas();
                 return true;
             }
 
@@ -87,6 +67,30 @@ public class FriendsTab1Fragment extends Fragment {
             }
         });
 
+    }
+
+    private void getDatas(){
+        if(idutilisateur != -2 && !searchView.getQuery().toString().isEmpty()){
+            UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
+            Call<List<Utilisateur>> call = service.findAllByPseudo(idutilisateur,searchView.getQuery().toString());
+            call.enqueue(new Callback<List<Utilisateur>>() {
+                @Override
+                public void onResponse(Call<List<Utilisateur>> call, Response<List<Utilisateur>> response) {
+                    if(response.body().isEmpty()){
+                        lv.setAdapter(new CustomAdapter(getActivity(),new ArrayList<Utilisateur>()));
+                        Toast.makeText(getContext(),"Aucun résultat !",Toast.LENGTH_LONG).show();
+                    }
+                    else
+                        lv.setAdapter(new CustomAdapter(getActivity(),response.body()));
+
+                }
+
+                @Override
+                public void onFailure(Call<List<Utilisateur>> call, Throwable t) {
+                    Toast.makeText(getContext(),"Erreur de recherche !",Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
 }

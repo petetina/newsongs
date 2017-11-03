@@ -1,4 +1,5 @@
 package newsongs.fr.newsongs.Adapters;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,8 +15,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import newsongs.fr.newsongs.API.FriendClient;
 import newsongs.fr.newsongs.API.ServiceGenerator;
-import newsongs.fr.newsongs.API.UtilisateurClient;
 import newsongs.fr.newsongs.Models.Reponse;
 import newsongs.fr.newsongs.Models.Utilisateur;
 import newsongs.fr.newsongs.R;
@@ -26,8 +27,8 @@ import retrofit2.Response;
 
 public class CustomAdapter extends BaseAdapter{
 
-    List<Utilisateur> result;
-    Context context;
+    private List<Utilisateur> result;
+    private Context context;
 
     private static LayoutInflater inflater=null;
     public CustomAdapter(Activity mainActivity, List<Utilisateur> prgmFriendsList) {
@@ -95,22 +96,22 @@ public class CustomAdapter extends BaseAdapter{
                     int idutilisateur = settings.getInt("idutilisateur", -2); //2//Appel à notre API pour créer l'utilisateur
                     int friendToDelete = (int)getItemId(position);
 
-                    UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
-
+                    FriendClient service = ServiceGenerator.createService(FriendClient.class);
                     Call<Reponse> call = service.deleteFriend(idutilisateur, friendToDelete);
 
                     call.enqueue(new Callback<Reponse>() {
 
                         @Override
                         public void onResponse(Call<Reponse> call, Response<Reponse> response) {
-                            if(response.code() == 200)
-                                Toast.makeText(context, "utilisateur supprimé " , Toast.LENGTH_LONG).show();
+                            if(response.code() == 200){
+                                Toast.makeText(context, response.body().getMessage() , Toast.LENGTH_LONG).show();
+                            }
 
                         }
 
                         @Override
                         public void onFailure(Call<Reponse> call, Throwable t) {
-                            Toast.makeText(context, "L'utilisateur n'a pas pu être supprimé", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "L'utilisateur n'a pas pu être supprimé"+t.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -126,10 +127,9 @@ public class CustomAdapter extends BaseAdapter{
                     int idutilisateur = settings.getInt("idutilisateur", -2); //2//Appel à notre API pour créer l'utilisateur
                     int friendToAdd = (int)getItemId(position);
 
-                    Log.e("addFriend",idutilisateur + ","+friendToAdd);
-                    UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
+                    FriendClient service = ServiceGenerator.createService(FriendClient.class);
 
-                    Call<Reponse> call = service.addFriend(idutilisateur, friendToAdd);
+                    Call<Reponse> call = service.inviteFriend(idutilisateur, friendToAdd);
 
                     call.enqueue(new Callback<Reponse>() {
 
@@ -140,7 +140,7 @@ public class CustomAdapter extends BaseAdapter{
                                 Toast.makeText(context,response.body().getMessage(),Toast.LENGTH_LONG).show();
                             }
                             else
-                                Toast.makeText(context,"addFriend"+response.code() + ", ",Toast.LENGTH_LONG).show();
+                                Toast.makeText(context,"L'utilisateur n'a pas pu être ajouté ! "+response.code(),Toast.LENGTH_LONG).show();
                         }
 
                         @Override
