@@ -35,7 +35,6 @@ public class FriendsTab1Fragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Toast.makeText(getContext(),"onCreateView1",Toast.LENGTH_SHORT).show();
         View view = inflater.inflate(R.layout.tabfriends1, container, false);
 
         SharedPreferences settings = getContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1

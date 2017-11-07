@@ -36,7 +36,6 @@ public class FriendsTab3Fragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Toast.makeText(getContext(),"onCreateView3",Toast.LENGTH_SHORT).show();
         View view = inflater.inflate(R.layout.tabfriends3, container, false);
         SharedPreferences settings = getContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
         idutilisateur = settings.getInt("idutilisateur", -2); //2//Appel à notre API pour créer l'utilisateur

@@ -16,6 +16,7 @@ import java.util.List;
 import newsongs.fr.newsongs.API.FriendClient;
 import newsongs.fr.newsongs.API.ServiceGenerator;
 import newsongs.fr.newsongs.Adapters.InvitationsAdapter;
+import newsongs.fr.newsongs.Interfaces.UpdateableFragmentInterface;
 import newsongs.fr.newsongs.Models.Utilisateur;
 import newsongs.fr.newsongs.R;
 import newsongs.fr.newsongs.Tools;
@@ -27,15 +28,18 @@ import retrofit2.Response;
  * Created by antoine on 02/11/17.
  */
 
-public class FriendsTab2Fragment extends Fragment {
+public class FriendsTab2Fragment extends Fragment implements UpdateableFragmentInterface {
     private ListView lv;
     private TextView tvNoInvitations;
 
     private int idutilisateur;
 
+    private LayoutInflater inflater;
+    private ViewGroup container;
+    private Bundle savedInstanceState;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Toast.makeText(getContext(),"onCreateView2",Toast.LENGTH_SHORT).show();
         View view = inflater.inflate(R.layout.tabfriends2, container, false);
         SharedPreferences settings = getContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
         idutilisateur = settings.getInt("idutilisateur", -2); //2//Appel à notre API pour créer l'utilisateur
@@ -44,6 +48,10 @@ public class FriendsTab2Fragment extends Fragment {
             hook(view);
             getDatas();
         }
+
+        this.inflater = inflater;
+        this.container = container;
+        this.savedInstanceState = savedInstanceState;
 
         return view;
     }
@@ -77,5 +85,14 @@ public class FriendsTab2Fragment extends Fragment {
                 Toast.makeText(getContext(),"Erreur lors de la récupération des invitations",Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void refresh() {
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit();
     }
 }
