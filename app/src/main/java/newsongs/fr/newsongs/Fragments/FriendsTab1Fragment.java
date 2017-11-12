@@ -38,7 +38,7 @@ public class FriendsTab1Fragment extends Fragment {
         View view = inflater.inflate(R.layout.tabfriends1, container, false);
 
         SharedPreferences settings = getContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
-        idutilisateur = settings.getInt("idutilisateur", -2); //2//Appel à notre API pour créer l'utilisateur
+        idutilisateur = settings.getInt("idutilisateur", -2);
 
         if(idutilisateur != -2) {
             hook(view);

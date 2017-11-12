@@ -1,5 +1,6 @@
 package newsongs.fr.newsongs.Activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.deezer.sdk.model.User;
@@ -30,6 +34,7 @@ import retrofit2.Response;
 public class FirstUseActivity extends BaseActivity {
     private Button btnInscription;
     private Button btnConnectWithDeezer;
+    private Button btnConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,7 @@ public class FirstUseActivity extends BaseActivity {
 
         btnInscription = (Button)findViewById(R.id.btnInscription);
         btnConnectWithDeezer = (Button)findViewById(R.id.btnConnectDezeer);
+        btnConnect = (Button)findViewById(R.id.btnConnect);
 
         //Définitions des listeners
         btnInscription.setOnClickListener(new View.OnClickListener() {
@@ -58,12 +64,69 @@ public class FirstUseActivity extends BaseActivity {
             }
         });
 
-        // restore any saved session
-        SessionStore sessionStore = new SessionStore();
-        /*if (sessionStore.restore(mDeezerConnect, getApplicationContext())) {
-            Toast.makeText(getApplicationContext(),"Connecté",Toast.LENGTH_LONG).show();
-        }else
-            Toast.makeText(getApplicationContext(),"Pas connecté",Toast.LENGTH_LONG).show();*/
+        btnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // custom dialog
+                final Dialog dialog = new Dialog(FirstUseActivity.this);
+                dialog.setContentView(R.layout.connect_dialog);
+                dialog.setTitle("Me connecter");
+
+                // set the custom dialog components - text, image and button
+                final EditText txtpseudo = dialog.findViewById(R.id.txtPseudo);
+                final EditText txtmotdepasse = dialog.findViewById(R.id.txtMotDePasse);
+                ImageButton btnClose = dialog.findViewById(R.id.btnCloseDialog);
+                Button btnConnect = dialog.findViewById(R.id.btnConnect2);
+
+                btnClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                btnConnect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if(!txtpseudo.getText().toString().isEmpty() && !txtmotdepasse.getText().toString().isEmpty()){
+                            UtilisateurClient service = ServiceGenerator.createService(UtilisateurClient.class);
+                            Call<Integer> call = service.login(txtpseudo.getText().toString(), Tools.md5(txtmotdepasse.getText().toString()));
+                            call.enqueue(new Callback<Integer>() {
+                                @Override
+                                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                                    if(response.code()==200)
+                                    {
+                                        //On sauvegarde l'id de l'utilisateur dans les préférences partagées
+                                        //On met à jour les préférences partagées
+                                        SharedPreferences settings;
+                                        SharedPreferences.Editor editor;
+                                        settings = getApplicationContext().getSharedPreferences(Tools.PREFS_NAME, Context.MODE_PRIVATE); //1
+                                        editor = settings.edit(); //2
+
+                                        editor.putInt("idutilisateur",response.body()); //3
+                                        editor.commit(); //4
+
+                                        Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                                        startActivity(i);
+                                    }else if(response.code() == 404){
+                                        Toast.makeText(getApplicationContext(),"Pseudo ou mot de passe incorrect !", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Integer> call, Throwable t) {
+                                    Toast.makeText(getApplicationContext(),"Une erreur est survenue lors de la connexion !"+t.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }else
+                            Toast.makeText(getApplicationContext(), "Veuillez renseigner tous les champs !",Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
     }
 
 

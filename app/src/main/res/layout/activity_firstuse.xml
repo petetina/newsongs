@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_weight="1"
     tools:context="newsongs.fr.newsongs.Activities.FirstUseActivity"
-    android:background="@color/bleuciel">
+    android:background="@color/greydark">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,6 +42,12 @@
             android:layout_width="match_parent"
             android:layout_height="50sp"
             android:text="@string/lblinscription" />
+
+        <Button
+            android:id="@+id/btnConnect"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:text="@string/lblconnecte" />
     </LinearLayout>
 
 </LinearLayout>

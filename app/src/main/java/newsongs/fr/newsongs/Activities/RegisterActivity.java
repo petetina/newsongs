@@ -42,7 +42,7 @@ public class RegisterActivity extends BaseActivity {
 
                 utilisateur.setPseudo(txtPseudo.getText().toString());
                 utilisateur.setMail(txtEmail.getText().toString());
-                utilisateur.setMotdepasse(txtMotDePasse.getText().toString());
+                utilisateur.setMotdepasse(Tools.md5(txtMotDePasse.getText().toString()));
 
                 Call<Reponse> call = service.createUser(utilisateur.getMail(),utilisateur.getPseudo(),utilisateur.getMotdepasse());
                 call.enqueue(new Callback<Reponse>() {

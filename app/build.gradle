@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':deezer-sdk-0.10.20')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
