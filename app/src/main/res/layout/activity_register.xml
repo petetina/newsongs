@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="newsongs.fr.newsongs.Activities.RegisterActivity"
-    android:layout_weight="1">
+    android:layout_weight="1"
+    android:background="@drawable/background_first_use">
 
     <LinearLayout
         android:layout_width="match_parent"
